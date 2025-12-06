@@ -2,15 +2,15 @@ import { Email } from "../valueObjects/Email";
 import { WhatsApp } from "../valueObjects/WhatsApp";
 
 interface UserProps {
-  id: string;
   name: string;
   email: Email;
-  whatsapp: WhatsApp;
+  whatsapp?: WhatsApp;
   topics: string[];
 }
 
 export class User {
   private props: UserProps;
+  private _id?: string;
 
   constructor(props: UserProps) {
     if (!props.name?.trim()) throw new Error("Name cannot be empty");
@@ -20,8 +20,13 @@ export class User {
     this.props = props;
   }
 
+  setId(id: string) {
+    if (this._id) throw new Error("ID has already been set");
+    this._id = id;
+  }
+
   get id() {
-    return this.props.id;
+    return this._id;
   }
   get email() {
     return this.props.email;
