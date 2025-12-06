@@ -1,5 +1,4 @@
 interface NewsProps {
-  id: string;
   title: string;
   content: string;
   publishedAt: Date;
@@ -13,15 +12,10 @@ export class News {
   constructor(props: NewsProps) {
     if (!props.title?.trim()) throw new Error("Tittle cannot be empty");
     if (!props.content?.trim()) throw new Error("Content cannot be empty");
-    if (!props.publishedAt || !(props.publishedAt instanceof Date))
-      throw new Error("PublishedAt must be a valid date");
 
     this.props = props;
   }
 
-  get id() {
-    return this.props.id;
-  }
   get title() {
     return this.props.title;
   }
