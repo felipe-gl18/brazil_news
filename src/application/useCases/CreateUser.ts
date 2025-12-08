@@ -12,6 +12,10 @@ export class CreateUser {
     const email = new Email(data.email);
     const whatsapp = data.whatsapp ? new WhatsApp(data.whatsapp) : undefined;
 
+    // validating if an user is not using the same email
+    const foundUser = await this.userRepository.findByEmail(email.valueOf);
+    if (foundUser) throw new Error("Email already beign used");
+
     // creating user entity
     // id is generated automatically by the database
     const user = new User({
@@ -21,7 +25,14 @@ export class CreateUser {
       topics: data.topics,
     });
 
-    // saving user in the repository
-    await this.userRepository.create(user);
+    // error handling
+    try {
+      // saving user in the repository
+      await this.userRepository.create(user);
+    } catch (error) {
+      if (error instanceof Error)
+        throw new Error(`Something went wrong: ${error.message}`);
+      throw new Error(`Something went wrong ${error}`);
+    }
   }
 }
