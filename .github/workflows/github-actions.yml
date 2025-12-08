@@ -1,0 +1,16 @@
+name: github_actions
+run-name: ${{ github.actor }} GitHub Actions
+on: [push]
+jobs:
+  check-tests-environments:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24.x"
+      - name: Install dependencies
+        run: npm ci
+      - name: Run tests
+        run: npm run test
