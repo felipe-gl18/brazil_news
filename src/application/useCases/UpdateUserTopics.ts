@@ -14,7 +14,7 @@ export class UpdateUserTopcis {
       await this.userRepository.updateUserTopics(id, topics);
     } catch (error) {
       if (error instanceof Error)
-        throw new Error(`Something went wrong ${error.message}`);
+        throw new Error(`Something went wrong: ${error.message}`);
       throw new Error(`Something went wrong: ${error}`);
     }
   }
