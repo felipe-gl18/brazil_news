@@ -1,19 +1,19 @@
-import { INewsRepository } from "../../domain/repositories/INewsRepository";
+import { IDeliveredNewsRepository } from "../../domain/repositories/IDeliveredNewsRepository";
 import { IUserRepository } from "../../domain/repositories/IUserRepository";
 
-export class FetchUserNews {
+export class FindUserDeliveredNews {
   constructor(
     private readonly userRepository: IUserRepository,
-    private readonly newsRepository: INewsRepository
+    private readonly deliveredNewsRepository: IDeliveredNewsRepository
   ) {}
-  async execute(email: string) {
+  async execute(id: string) {
     // validate if user exists
-    const foundUser = await this.userRepository.findByEmail(email);
+    const foundUser = await this.userRepository.findById(id);
     if (!foundUser) throw new Error("User not found!");
 
     // error handling
     try {
-      return await this.newsRepository.findNews(foundUser.topics);
+      return await this.deliveredNewsRepository.findByUser(id);
     } catch (error) {
       if (error instanceof Error)
         throw new Error(`Something went wrong: ${error.message}`);
