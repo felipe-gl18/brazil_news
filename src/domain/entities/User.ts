@@ -1,5 +1,5 @@
-import { Email } from "../valueObjects/Email";
-import { WhatsApp } from "../valueObjects/WhatsApp";
+import { Email } from "../valueObjects/Email.js";
+import { WhatsApp } from "../valueObjects/WhatsApp.js";
 
 interface UserProps {
   name: string;

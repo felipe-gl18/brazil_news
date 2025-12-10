@@ -1,5 +1,5 @@
-import { News } from "../entities/News";
-import { User } from "../entities/User";
+import { News } from "../entities/News.js";
+import { User } from "../entities/User.js";
 
 export class NewsFilterService {
   static matchUserInterests(user: User, news: News): boolean {
