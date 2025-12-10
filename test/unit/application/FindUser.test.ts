@@ -1,7 +1,7 @@
 import { describe, it, mock } from "node:test";
-import { IUserRepository } from "../../../src/domain/repositories/IUserRepository";
 import assert from "node:assert/strict";
-import { FindUser } from "../../../src/application/useCases/FindUser";
+import { IUserRepository } from "../../../src/domain/repositories/IUserRepository";
+import { FindUser } from "../../../src/application/useCases/FindUser.js";
 
 describe("FindUser use case", () => {
   const userRepository: IUserRepository = {

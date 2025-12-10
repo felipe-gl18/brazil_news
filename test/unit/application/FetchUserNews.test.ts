@@ -1,7 +1,7 @@
 import { describe, it, mock } from "node:test";
 import { INewsRepository } from "../../../src/domain/repositories/INewsRepository";
 import { IUserRepository } from "../../../src/domain/repositories/IUserRepository";
-import { FetchUserNews } from "../../../src/application/useCases/FetchUserNews";
+import { FetchUserNews } from "../../../src/application/useCases/FetchUserNews.js";
 import assert from "node:assert/strict";
 
 describe("FetchUserNews use case", () => {

@@ -1,6 +1,6 @@
 import assert from "assert";
 import { describe, it } from "node:test";
-import { Email } from "../../../src/domain/valueObjects/Email";
+import { Email } from "../../../src/domain/valueObjects/Email.js";
 
 describe("Email Value Object", () => {
   it("should not allow invalid email", () => {

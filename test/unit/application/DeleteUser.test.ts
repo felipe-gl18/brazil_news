@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it, mock } from "node:test";
 import { IUserRepository } from "../../../src/domain/repositories/IUserRepository";
-import { DeleteUser } from "../../../src/application/useCases/DeleteUser";
+import { DeleteUser } from "../../../src/application/useCases/DeleteUser.js";
 
 describe("DeleteUser use case", () => {
   const userRepository: IUserRepository = {

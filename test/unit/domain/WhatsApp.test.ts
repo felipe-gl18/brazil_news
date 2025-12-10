@@ -1,6 +1,6 @@
 import assert from "assert";
 import { describe, it } from "node:test";
-import { WhatsApp } from "../../../src/domain/valueObjects/WhatsApp";
+import { WhatsApp } from "../../../src/domain/valueObjects/WhatsApp.js";
 
 describe("WhatsApp Value Object", () => {
   it("should not allow invalid whatsapp number", () => {

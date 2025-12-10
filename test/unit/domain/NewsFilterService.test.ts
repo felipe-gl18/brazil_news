@@ -1,9 +1,9 @@
 import { describe, it } from "node:test";
-import { Email } from "../../../src/domain/valueObjects/Email";
-import { User } from "../../../src/domain/entities/User";
-import { News } from "../../../src/domain/entities/News";
-import { NewsFilterService } from "../../../src/domain/services/NewsFilterService";
 import assert from "assert";
+import { Email } from "../../../src/domain/valueObjects/Email.js";
+import { User } from "../../../src/domain/entities/User.js";
+import { News } from "../../../src/domain/entities/News.js";
+import { NewsFilterService } from "../../../src/domain/services/NewsFilterService.js";
 
 describe("NewsFilterService Domain Tests", () => {
   it("should return true if user interests match news topics", () => {

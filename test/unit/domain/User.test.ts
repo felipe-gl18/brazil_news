@@ -1,7 +1,7 @@
 import assert from "assert";
 import { describe, it } from "node:test";
-import { User } from "../../../src/domain/entities/User";
-import { Email } from "../../../src/domain/valueObjects/Email";
+import { User } from "../../../src/domain/entities/User.js";
+import { Email } from "../../../src/domain/valueObjects/Email.js";
 
 describe("User Entity", () => {
   it("should not allow empty name", () => {

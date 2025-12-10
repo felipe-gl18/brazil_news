@@ -1,6 +1,6 @@
 import assert from "assert";
 import { describe, it } from "node:test";
-import { News } from "../../../src/domain/entities/News";
+import { News } from "../../../src/domain/entities/News.js";
 
 describe("News Entity", () => {
   it("should not allow empty tittle", () => {

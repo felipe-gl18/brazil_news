@@ -1,7 +1,7 @@
 import { describe, it, mock } from "node:test";
-import { INewsRepository } from "../../../src/domain/repositories/INewsRepository";
-import { FindNews } from "../../../src/application/useCases/FindNews";
 import assert from "node:assert/strict";
+import { INewsRepository } from "../../../src/domain/repositories/INewsRepository";
+import { FindNews } from "../../../src/application/useCases/FindNews.js";
 
 describe("FindNews use case", () => {
   const newsRepository: INewsRepository = {

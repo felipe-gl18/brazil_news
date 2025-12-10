@@ -1,7 +1,7 @@
 import { describe, it, mock } from "node:test";
-import { IUserRepository } from "../../../src/domain/repositories/IUserRepository";
-import { UpdateUserTopcis } from "../../../src/application/useCases/UpdateUserTopics";
 import assert from "node:assert/strict";
+import { IUserRepository } from "../../../src/domain/repositories/IUserRepository";
+import { UpdateUserTopcis } from "../../../src/application/useCases/UpdateUserTopics.js";
 
 describe("UpdatedUserTopics use case", () => {
   const userRepository: IUserRepository = {
