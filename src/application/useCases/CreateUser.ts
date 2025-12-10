@@ -1,7 +1,7 @@
-import { User } from "../../domain/entities/User";
+import { User } from "../../domain/entities/User.js";
 import { IUserRepository } from "../../domain/repositories/IUserRepository";
-import { Email } from "../../domain/valueObjects/Email";
-import { WhatsApp } from "../../domain/valueObjects/WhatsApp";
+import { Email } from "../../domain/valueObjects/Email.js";
+import { WhatsApp } from "../../domain/valueObjects/WhatsApp.js";
 import { CreateUserDTO } from "./CreateUserDTO";
 
 export class CreateUser {
