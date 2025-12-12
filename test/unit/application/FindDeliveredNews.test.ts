@@ -25,7 +25,7 @@ describe("FindDeliveredNews use case", () => {
   });
   it("should allow to fetch news", async () => {
     mock.method(deliveredNewsRepository, "findAll", () => {
-      return Promise.resolve({ title: "News title", content: "News content" });
+      return Promise.resolve({ link: "", topic: "" });
     });
     const findNews = new FindDeliveredNews(deliveredNewsRepository);
     await assert.doesNotReject(findNews.execute());
