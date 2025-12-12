@@ -3,7 +3,8 @@ interface NewsProps {
   content: string;
   publishedAt: Date;
   images?: string[];
-  topics: string[];
+  topic: string;
+  link: string;
 }
 
 export class News {
@@ -28,7 +29,10 @@ export class News {
   get images() {
     return this.props.images;
   }
-  get topics() {
-    return this.props.topics;
+  get topic() {
+    return this.props.topic;
+  }
+  get link() {
+    return this.props.link;
   }
 }
