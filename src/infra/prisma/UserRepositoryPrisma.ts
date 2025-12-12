@@ -1,55 +1,101 @@
-import { PrismaClient } from "../../../generated/prisma/client";
+import { PrismaClient, Prisma } from "../../../generated/prisma/client";
 import { User } from "../../domain/entities/User";
+import { EmailAlreadyInUseError } from "../../domain/erros/EmailAlreadyInUseError";
+import { UserNotFoundError } from "../../domain/erros/UserNotFoundError";
 import { IUserRepository } from "../../domain/repositories/IUserRepository";
+import { RepositoryError } from "../errors/RepositoryError";
 import { UserMapper } from "../mappers/UserMapper";
 
 export class UserRepositoryPrisma implements IUserRepository {
   constructor(private readonly prismaClient: PrismaClient) {}
   async create(user: User): Promise<void> {
-    await this.prismaClient.user.create({
-      data: {
-        name: user.name,
-        email: user.email.valueOf,
-        topics: user.topics,
-        whatsapp: user.whatsapp?.valueOf,
-      },
-    });
+    try {
+      await this.prismaClient.user.create({
+        data: UserMapper.toPersistence(user),
+      });
+    } catch (error: any) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === "P2002"
+      ) {
+        throw new EmailAlreadyInUseError(user.email.valueOf);
+      }
+      throw new RepositoryError("Failed to create user", error);
+    }
   }
   async deleteById(id: string): Promise<void> {
-    await this.prismaClient.user.delete({
-      where: {
-        id,
-      },
-    });
+    try {
+      await this.prismaClient.user.delete({
+        where: {
+          id,
+        },
+      });
+    } catch (error: any) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === "P2025"
+      ) {
+        throw new UserNotFoundError();
+      }
+      throw new RepositoryError("Failed to delete user", error);
+    }
   }
   async findByEmail(email: string): Promise<User | null> {
-    const user = await this.prismaClient.user.findUnique({
-      where: { email },
-      include: {
-        deliveredNews: true,
-      },
-    });
-    if (!user) return null;
-    return UserMapper.toDomain(user);
+    try {
+      const user = await this.prismaClient.user.findUniqueOrThrow({
+        where: { email },
+        include: {
+          deliveredNews: true,
+        },
+      });
+      return UserMapper.toDomain(user);
+    } catch (error: any) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === "P2025"
+      ) {
+        throw new UserNotFoundError();
+      }
+      throw new RepositoryError("Failed to find user by email", error);
+    }
   }
   async findById(id: string): Promise<User | null> {
-    const user = await this.prismaClient.user.findUnique({
-      where: {
-        id,
-      },
-      include: {
-        deliveredNews: true,
-      },
-    });
-    if (!user) return null;
-    return UserMapper.toDomain(user);
+    try {
+      const user = await this.prismaClient.user.findUniqueOrThrow({
+        where: {
+          id,
+        },
+        include: {
+          deliveredNews: true,
+        },
+      });
+      return UserMapper.toDomain(user);
+    } catch (error: any) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === "P2025"
+      ) {
+        throw new UserNotFoundError();
+      }
+      throw new RepositoryError("Failed to find user by id", error);
+    }
   }
   async updateUserTopics(id: string, topics: string[]): Promise<void> {
-    await this.prismaClient.user.update({
-      where: {
-        id,
-      },
-      data: { topics },
-    });
+    try {
+      await this.prismaClient.user.update({
+        where: {
+          id,
+        },
+        data: { topics },
+      });
+    } catch (error: any) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === "P2025"
+      ) {
+        throw new UserNotFoundError();
+      }
+      throw new RepositoryError("Failed to update user topics", error);
+    }
   }
 }
