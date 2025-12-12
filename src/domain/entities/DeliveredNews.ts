@@ -2,7 +2,7 @@ interface DeliveredNewsProps {
   link: string;
   topic: string;
   userId: string;
-  sentAt: Date;
+  sentAt?: Date;
 }
 export class DeliveredNews {
   private props: DeliveredNewsProps;
@@ -26,5 +26,8 @@ export class DeliveredNews {
   }
   get sentAt() {
     return this.props.sentAt;
+  }
+  get Id() {
+    return this._id;
   }
 }
