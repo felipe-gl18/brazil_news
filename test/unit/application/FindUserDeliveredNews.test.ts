@@ -16,7 +16,7 @@ describe("FindUserDeliveredNews use case", () => {
     },
     async updateUserTopics(id, topics) {},
   };
-  const newsRepository: IDeliveredNewsRepository = {
+  const deliveredNewsRepository: IDeliveredNewsRepository = {
     async findAll() {
       return null;
     },
@@ -25,6 +25,7 @@ describe("FindUserDeliveredNews use case", () => {
     },
     async create() {},
     async deleteByUser(userId) {},
+    async saveMany() {},
   };
   it("should not allow to fetch news if the user doesnt exist", async () => {
     mock.method(userRepository, "findById", () => {
@@ -32,7 +33,7 @@ describe("FindUserDeliveredNews use case", () => {
     });
     const findUserDeliveredNews = new FindUserDeliveredNews(
       userRepository,
-      newsRepository
+      deliveredNewsRepository
     );
     await assert.rejects(findUserDeliveredNews.execute("id"), {
       message: "User not found!",
@@ -45,10 +46,14 @@ describe("FindUserDeliveredNews use case", () => {
         topics: ["fitness"],
       });
     });
-    const findMock = mock.method(newsRepository, "findByUser", () => {});
+    const findMock = mock.method(
+      deliveredNewsRepository,
+      "findByUser",
+      () => {}
+    );
     const findUserDeliveredNews = new FindUserDeliveredNews(
       userRepository,
-      newsRepository
+      deliveredNewsRepository
     );
     await assert.doesNotReject(findUserDeliveredNews.execute("id"));
     assert.equal(findMock.mock.calls.length, 1);

@@ -16,8 +16,9 @@ describe("NewsFilterService Domain Tests", () => {
     const news = new News({
       title: "Node.js Tips",
       content: "Learn advanced Node.js patterns",
-      topics: ["fitness", "health"],
+      topic: "fitness",
       publishedAt: new Date(),
+      link: "",
     });
 
     const result = NewsFilterService.matchUserInterests(user, news);
@@ -33,8 +34,9 @@ describe("NewsFilterService Domain Tests", () => {
     const news = new News({
       title: "Node.js Tips",
       content: "Learn advanced Node.js patterns",
-      topics: ["sports", "entertainment"],
+      topic: "entertainment",
       publishedAt: new Date(),
+      link: "",
     });
 
     const result = NewsFilterService.matchUserInterests(user, news);

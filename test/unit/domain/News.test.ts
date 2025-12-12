@@ -10,7 +10,8 @@ describe("News Entity", () => {
           title: "",
           content: "Some content",
           publishedAt: new Date(),
-          topics: ["fitness"],
+          topic: "fitness",
+          link: "",
         }),
       {
         message: "Tittle cannot be empty",
@@ -24,7 +25,8 @@ describe("News Entity", () => {
           title: "Some title",
           content: "",
           publishedAt: new Date(),
-          topics: ["fitness"],
+          topic: "fitness",
+          link: "",
         }),
       {
         message: "Content cannot be empty",
@@ -37,12 +39,13 @@ describe("News Entity", () => {
       content: "Some content",
       publishedAt: new Date(),
       images: ["image1", "image2"],
-      topics: ["fitness"],
+      topic: "fitness",
+      link: "",
     });
     assert.equal(news.title, "Some title");
     assert.equal(news.content, "Some content");
     assert.equal(news.publishedAt instanceof Date, true);
     assert.deepEqual(news.images, ["image1", "image2"]);
-    assert.deepEqual(news.topics, ["fitness"]);
+    assert.deepEqual(news.topic, "fitness");
   });
 });

@@ -13,6 +13,7 @@ describe("FindDeliveredNews use case", () => {
     },
     async create() {},
     async deleteByUser(userId) {},
+    async saveMany() {},
   };
   it("should not allow to fetch news", async () => {
     mock.method(deliveredNewsRepository, "findAll", () => {
