@@ -1,8 +1,6 @@
 export class UserApplicationError extends Error {
   constructor(message: string, cause?: unknown) {
-    super(message, {
-      cause,
-    });
+    super(message, { cause });
     this.name = `UserApplicationError`;
   }
 }
