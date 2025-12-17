@@ -2,6 +2,7 @@ import { describe, it, mock } from "node:test";
 import assert from "node:assert/strict";
 import { IUserRepository } from "../../../src/domain/repositories/IUserRepository";
 import { UpdateUserTopcis } from "../../../src/application/useCases/UpdateUserTopics.js";
+import { UserNotFoundError } from "../../../src/domain/erros/UserNotFoundError.js";
 
 describe("UpdatedUserTopics use case", () => {
   const userRepository: IUserRepository = {
@@ -16,13 +17,14 @@ describe("UpdatedUserTopics use case", () => {
     async updateUserTopics(id, topics) {},
   };
   it("should not allow update user topics if user doesnt exist", async () => {
-    mock.method(userRepository, "findById", () => {
-      return Promise.resolve(null);
+    mock.method(userRepository, "updateUserTopics", () => {
+      throw new UserNotFoundError();
     });
     const updateUserTopics = new UpdateUserTopcis(userRepository);
-    await assert.rejects(updateUserTopics.execute("id", ["fitness"]), {
-      message: "User not found",
-    });
+    await assert.rejects(
+      updateUserTopics.execute("id", ["fitness"]),
+      UserNotFoundError
+    );
   });
   it("should allow update user topics if user exist", async () => {
     mock.method(userRepository, "findById", () => {
@@ -40,20 +42,5 @@ describe("UpdatedUserTopics use case", () => {
     const [id, topics] = updateMock.mock.calls[0].arguments;
     assert.equal(id, "id");
     assert.deepEqual(topics, ["fitness"]);
-  });
-  it("should throw wrapped error when repository fails", async () => {
-    mock.method(userRepository, "findById", () => {
-      return Promise.resolve({
-        id: "id",
-        email: "johndoe@gmail.com",
-      });
-    });
-    mock.method(userRepository, "updateUserTopics", () => {
-      throw new Error("DB failure");
-    });
-    const updateUserTopics = new UpdateUserTopcis(userRepository);
-    await assert.rejects(updateUserTopics.execute("id", ["health"]), {
-      message: "Something went wrong: DB failure",
-    });
   });
 });

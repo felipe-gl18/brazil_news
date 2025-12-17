@@ -3,19 +3,9 @@ import { IDeliveredNewsRepository } from "../../../src/domain/repositories/IDeli
 import { IUserRepository } from "../../../src/domain/repositories/IUserRepository";
 import { FindUserDeliveredNews } from "../../../src/application/useCases/FindUserDeliveredNews.js";
 import assert from "node:assert/strict";
+import { UserNotFoundError } from "../../../src/domain/erros/UserNotFoundError.js";
 
 describe("FindUserDeliveredNews use case", () => {
-  const userRepository: IUserRepository = {
-    async create(user) {},
-    async deleteById(id) {},
-    async findByEmail(email) {
-      return null;
-    },
-    async findById(id) {
-      return null;
-    },
-    async updateUserTopics(id, topics) {},
-  };
   const deliveredNewsRepository: IDeliveredNewsRepository = {
     async findAll() {
       return null;
@@ -23,36 +13,29 @@ describe("FindUserDeliveredNews use case", () => {
     async findByUser(userId) {
       return null;
     },
-    async create() {},
+    async save() {},
     async deleteByUser(userId) {},
     async saveMany() {},
   };
   it("should not allow to fetch news if the user doesnt exist", async () => {
-    mock.method(userRepository, "findById", () => {
-      return Promise.resolve(null);
+    mock.method(deliveredNewsRepository, "findByUser", () => {
+      throw new UserNotFoundError();
     });
     const findUserDeliveredNews = new FindUserDeliveredNews(
-      userRepository,
       deliveredNewsRepository
     );
-    await assert.rejects(findUserDeliveredNews.execute("id"), {
-      message: "User not found!",
-    });
+    await assert.rejects(
+      findUserDeliveredNews.execute("id"),
+      UserNotFoundError
+    );
   });
   it("should allow to fetch news", async () => {
-    mock.method(userRepository, "findById", () => {
-      return Promise.resolve({
-        email: "johndoe@gmail.com",
-        topics: ["fitness"],
-      });
-    });
     const findMock = mock.method(
       deliveredNewsRepository,
       "findByUser",
       () => {}
     );
     const findUserDeliveredNews = new FindUserDeliveredNews(
-      userRepository,
       deliveredNewsRepository
     );
     await assert.doesNotReject(findUserDeliveredNews.execute("id"));

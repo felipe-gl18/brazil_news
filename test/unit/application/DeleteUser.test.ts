@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it, mock } from "node:test";
 import { IUserRepository } from "../../../src/domain/repositories/IUserRepository";
 import { DeleteUser } from "../../../src/application/useCases/DeleteUser.js";
+import { UserNotFoundError } from "../../../src/domain/erros/UserNotFoundError.js";
 
 describe("DeleteUser use case", () => {
   const userRepository: IUserRepository = {
@@ -16,13 +17,11 @@ describe("DeleteUser use case", () => {
     async updateUserTopics(id, topics) {},
   };
   it("should not allow delete user if user doesnt exist", async () => {
-    mock.method(userRepository, "findById", () => {
-      return Promise.resolve(null);
+    mock.method(userRepository, "deleteById", () => {
+      throw new UserNotFoundError();
     });
     const deleteUser = new DeleteUser(userRepository);
-    await assert.rejects(deleteUser.execute("id"), {
-      message: "User does not exist!",
-    });
+    await assert.rejects(deleteUser.execute("id"), UserNotFoundError);
   });
   it("should allow delete user", async () => {
     mock.method(userRepository, "findById", () => {
@@ -39,20 +38,5 @@ describe("DeleteUser use case", () => {
     assert.equal(deleteMock.mock.calls.length, 1);
     const [id] = deleteMock.mock.calls[0].arguments;
     assert.equal(id, "id");
-  });
-  it("should throw wrapped error when repository fails", async () => {
-    mock.method(userRepository, "findById", () => {
-      return Promise.resolve({
-        id: "id",
-        email: "johndoe@gmail.com",
-      });
-    });
-    mock.method(userRepository, "deleteById", () => {
-      throw new Error("DB failure");
-    });
-    const deleteUser = new DeleteUser(userRepository);
-    await assert.rejects(deleteUser.execute("id"), {
-      message: "Something went wrong: DB failure",
-    });
   });
 });

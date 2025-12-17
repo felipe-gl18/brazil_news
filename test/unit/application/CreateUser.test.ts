@@ -2,6 +2,7 @@ import { describe, it, mock } from "node:test";
 import assert from "node:assert/strict";
 import { IUserRepository } from "../../../src/domain/repositories/IUserRepository";
 import { CreateUser } from "../../../src/application/useCases/CreateUser.js";
+import { EmailAlreadyInUseError } from "../../../src/domain/erros/EmailAlreadyInUseError.js";
 
 describe("CreateUser use case", () => {
   const userRepository: IUserRepository = {
@@ -16,19 +17,17 @@ describe("CreateUser use case", () => {
     async updateUserTopics(id, topics) {},
   };
   it("should not allow create user if the email is already beign used", async () => {
-    mock.method(userRepository, "findByEmail", () => {
-      return Promise.resolve({ id: 1, email: "johndoe@gmail.com" });
+    mock.method(userRepository, "create", () => {
+      throw new EmailAlreadyInUseError("johndoe@gmail.com");
     });
     const createUser = new CreateUser(userRepository);
     await assert.rejects(
       createUser.execute({
         email: "johndoe@gmail.com",
         name: "John Doe",
-        topics: ["health"],
+        topics: ["fitness"],
       }),
-      {
-        message: "Email already beign used",
-      }
+      EmailAlreadyInUseError
     );
   });
   it("should allow create user", async () => {
@@ -50,24 +49,5 @@ describe("CreateUser use case", () => {
     const [createdUser] = createMock.mock.calls[0].arguments;
     assert.equal(createdUser?.name, "John Doe");
     assert.deepEqual(createdUser.topics, ["health"]);
-  });
-  it("should throw wrapped error when repository fails", async () => {
-    mock.method(userRepository, "findByEmail", () => {
-      return Promise.resolve(null);
-    });
-    mock.method(userRepository, "create", () => {
-      throw new Error("DB failure");
-    });
-    const createUser = new CreateUser(userRepository);
-    await assert.rejects(
-      createUser.execute({
-        email: "johndoe@gmail.com",
-        name: "John Doe",
-        topics: ["health"],
-      }),
-      {
-        message: "Something went wrong: DB failure",
-      }
-    );
   });
 });

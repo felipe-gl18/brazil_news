@@ -2,7 +2,7 @@ import { describe, it, mock } from "node:test";
 import assert from "node:assert/strict";
 import { IUserRepository } from "../../../src/domain/repositories/IUserRepository";
 import { FindUser } from "../../../src/application/useCases/FindUser.js";
-
+import { UserNotFoundError } from "../../../src/domain/erros/UserNotFoundError.js";
 describe("FindUser use case", () => {
   const userRepository: IUserRepository = {
     async create(user) {},
@@ -17,12 +17,13 @@ describe("FindUser use case", () => {
   };
   it("should not allow find user", async () => {
     mock.method(userRepository, "findByEmail", () => {
-      return Promise.resolve(null);
+      throw new UserNotFoundError();
     });
     const findUser = new FindUser(userRepository);
-    await assert.rejects(findUser.execute("johndoe@gmail.com"), {
-      message: "User not found",
-    });
+    await assert.rejects(
+      findUser.execute("johndoe@gmail.com"),
+      UserNotFoundError
+    );
   });
   it("should allow find user", async () => {
     mock.method(userRepository, "findByEmail", () => {
