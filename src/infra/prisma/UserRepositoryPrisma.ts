@@ -3,6 +3,7 @@ import { User } from "../../domain/entities/User";
 import { EmailAlreadyInUseError } from "../../domain/erros/EmailAlreadyInUseError";
 import { UserNotFoundError } from "../../domain/erros/UserNotFoundError";
 import { IUserRepository } from "../../domain/repositories/IUserRepository";
+import { DatabaseError } from "../errors/DatabaseError";
 import { RepositoryError } from "../errors/RepositoryError";
 import { UserMapper } from "../mappers/UserMapper";
 
@@ -17,9 +18,10 @@ export class UserRepositoryPrisma implements IUserRepository {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
         error.code === "P2002"
-      ) {
+      )
         throw new EmailAlreadyInUseError(user.email.valueOf);
-      }
+      if (error instanceof Prisma.PrismaClientInitializationError)
+        throw new DatabaseError("Failed to create user", error);
       throw new RepositoryError("Failed to create user", error);
     }
   }
@@ -34,9 +36,10 @@ export class UserRepositoryPrisma implements IUserRepository {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
         error.code === "P2025"
-      ) {
+      )
         throw new UserNotFoundError();
-      }
+      if (error instanceof Prisma.PrismaClientInitializationError)
+        throw new DatabaseError("Failed to create user", error);
       throw new RepositoryError("Failed to delete user", error);
     }
   }
@@ -53,9 +56,10 @@ export class UserRepositoryPrisma implements IUserRepository {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
         error.code === "P2025"
-      ) {
+      )
         throw new UserNotFoundError();
-      }
+      if (error instanceof Prisma.PrismaClientInitializationError)
+        throw new DatabaseError("Failed to create user", error);
       throw new RepositoryError("Failed to find user by email", error);
     }
   }
@@ -74,9 +78,10 @@ export class UserRepositoryPrisma implements IUserRepository {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
         error.code === "P2025"
-      ) {
+      )
         throw new UserNotFoundError();
-      }
+      if (error instanceof Prisma.PrismaClientInitializationError)
+        throw new DatabaseError("Failed to create user", error);
       throw new RepositoryError("Failed to find user by id", error);
     }
   }
@@ -92,9 +97,10 @@ export class UserRepositoryPrisma implements IUserRepository {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
         error.code === "P2025"
-      ) {
+      )
         throw new UserNotFoundError();
-      }
+      if (error instanceof Prisma.PrismaClientInitializationError)
+        throw new DatabaseError("Failed to create user", error);
       throw new RepositoryError("Failed to update user topics", error);
     }
   }
