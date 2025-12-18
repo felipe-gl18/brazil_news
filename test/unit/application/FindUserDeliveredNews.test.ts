@@ -1,6 +1,5 @@
 import { describe, it, mock } from "node:test";
 import { IDeliveredNewsRepository } from "../../../src/domain/repositories/IDeliveredNewsRepository";
-import { IUserRepository } from "../../../src/domain/repositories/IUserRepository";
 import { FindUserDeliveredNews } from "../../../src/application/useCases/FindUserDeliveredNews.js";
 import assert from "node:assert/strict";
 import { UserNotFoundError } from "../../../src/domain/erros/UserNotFoundError.js";
