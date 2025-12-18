@@ -1,4 +1,4 @@
-import { DeliveredNews } from "../../domain/entities/DeliveredNews";
+import { DeliveredNews } from "../../domain/entities/DeliveredNews.js";
 
 export class DeliveredNewsMapper {
   static toDomain(raw: any) {
