@@ -1,11 +1,11 @@
-import { PrismaClient, Prisma } from "../../../generated/prisma/client";
-import { User } from "../../domain/entities/User";
-import { EmailAlreadyInUseError } from "../../domain/erros/EmailAlreadyInUseError";
-import { UserNotFoundError } from "../../domain/erros/UserNotFoundError";
+import { PrismaClient, Prisma } from "../../../generated/prisma/client.js";
+import { User } from "../../domain/entities/User.js";
+import { EmailAlreadyInUseError } from "../../domain/erros/EmailAlreadyInUseError.js";
+import { UserNotFoundError } from "../../domain/erros/UserNotFoundError.js";
 import { IUserRepository } from "../../domain/repositories/IUserRepository";
-import { DatabaseError } from "../errors/DatabaseError";
-import { RepositoryError } from "../errors/RepositoryError";
-import { UserMapper } from "../mappers/UserMapper";
+import { DatabaseError } from "../errors/DatabaseError.js";
+import { RepositoryError } from "../errors/RepositoryError.js";
+import { UserMapper } from "../mappers/UserMapper.js";
 
 export class UserRepositoryPrisma implements IUserRepository {
   constructor(private readonly prismaClient: PrismaClient) {}
