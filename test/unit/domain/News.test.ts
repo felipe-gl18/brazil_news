@@ -38,14 +38,12 @@ describe("News Entity", () => {
       title: "Some title",
       content: "Some content",
       publishedAt: new Date(),
-      images: ["image1", "image2"],
       topic: "fitness",
       link: "",
     });
     assert.equal(news.title, "Some title");
     assert.equal(news.content, "Some content");
     assert.equal(news.publishedAt instanceof Date, true);
-    assert.deepEqual(news.images, ["image1", "image2"]);
     assert.deepEqual(news.topic, "fitness");
   });
 });
