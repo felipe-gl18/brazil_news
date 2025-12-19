@@ -2,7 +2,6 @@ interface NewsProps {
   title: string;
   content: string;
   publishedAt: Date;
-  images?: string[];
   topic: string;
   link: string;
 }
@@ -25,9 +24,6 @@ export class News {
   }
   get publishedAt() {
     return this.props.publishedAt;
-  }
-  get images() {
-    return this.props.images;
   }
   get topic() {
     return this.props.topic;
