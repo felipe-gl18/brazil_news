@@ -1,7 +1,7 @@
 import { describe, it, mock } from "node:test";
 import { IUserRepository } from "../../../src/domain/repositories/IUserRepository";
 import { IDeliveredNewsRepository } from "../../../src/domain/repositories/IDeliveredNewsRepository";
-import { IFetchRSSService } from "../../../src/application/services/IFetchRSSService";
+import { IFetchNewsService } from "../../../src/application/services/IFetchNewsService";
 import { INotificationService } from "../../../src/application/services/INotificationService";
 import { UserNotFoundError } from "../../../src/domain/erros/UserNotFoundError.js";
 import { News } from "../../../src/domain/entities/News.js";
@@ -33,7 +33,7 @@ describe("SendRSSNewsToUser use case", () => {
     async deleteByUser(userId) {},
     async saveMany() {},
   };
-  const fetchRSSService: IFetchRSSService = {
+  const fetchRSSService: IFetchNewsService = {
     async fetchLatestNews(topics) {
       return [
         new News({
@@ -42,14 +42,15 @@ describe("SendRSSNewsToUser use case", () => {
           publishedAt: new Date(),
           title: "title",
           topic: "fitness",
-          images: [""],
         }),
       ];
     },
   };
-  const notificationService: INotificationService = {
-    async sendNewsEmail(email, news) {},
-    async sendNewsWhatsApp(phone, news) {},
+  const emailNotificationService: INotificationService = {
+    async notify() {},
+  };
+  const telegramNotificationService: INotificationService = {
+    async notify() {},
   };
   it("should not allow to send RSS news to user if it doesn't exist", async () => {
     mock.method(userRepository, "findById", () => {
@@ -59,7 +60,7 @@ describe("SendRSSNewsToUser use case", () => {
       userRepository,
       deliveredNewsRepository,
       fetchRSSService,
-      notificationService
+      emailNotificationService
     );
     await assert.rejects(sendRSSNewsToUser.execute("id"), UserNotFoundError);
   });
@@ -88,20 +89,20 @@ describe("SendRSSNewsToUser use case", () => {
       () => {}
     );
     const sendNewsEmailMock = mock.method(
-      notificationService,
-      "sendNewsEmail",
+      emailNotificationService,
+      "notify",
       () => {}
     );
     const sendNewsWhatsAppMock = mock.method(
-      notificationService,
-      "sendNewsWhatsApp",
+      emailNotificationService,
+      "notify",
       () => {}
     );
     const sendRSSNewsToUser = new SendRSSNewsToUser(
       userRepository,
       deliveredNewsRepository,
       fetchRSSService,
-      notificationService
+      emailNotificationService
     );
     await assert.doesNotReject(sendRSSNewsToUser.execute("id"));
     assert.equal(saveManyMock.mock.calls[0].arguments[1], "id");
