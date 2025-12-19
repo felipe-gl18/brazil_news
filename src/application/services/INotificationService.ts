@@ -1,6 +1,4 @@
-import { News } from "../../domain/entities/News";
-
+import { NotificationPayloadDTO } from "../dtos/NotificationDTO";
 export interface INotificationService {
-  sendNewsEmail(email: string, news: string): Promise<void>;
-  sendNewsWhatsApp(phone: string, news: string): Promise<void>;
+  notify(payload: NotificationPayloadDTO): Promise<void>;
 }
