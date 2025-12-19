@@ -24,10 +24,10 @@ export class SendRSSNewsToUser {
     const deliveredNews = releventNews.map((news) =>
       RSSNewsMapper.toDeliveredNews(news, userId)
     );
-    await this.deliveredNewsRepository.saveMany(deliveredNews, userId);
+    await this.deliveredNewsRepository.saveMany(deliveredNews);
     const recipient = {
       email: foundUser!.email.valueOf,
-      telegramChatId: foundUser!.whatsapp?.valueOf,
+      telegramChatId: foundUser!.telegramChatId?.valueOf,
     };
     await this.notificationService.notify({
       news: releventNews,
