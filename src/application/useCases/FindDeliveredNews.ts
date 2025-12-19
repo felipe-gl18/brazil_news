@@ -4,6 +4,6 @@ export class FindDeliveredNews {
     private readonly deliveredNewsRepository: IDeliveredNewsRepository
   ) {}
   async execute() {
-    await this.deliveredNewsRepository.findAll();
+    return await this.deliveredNewsRepository.findAll();
   }
 }
