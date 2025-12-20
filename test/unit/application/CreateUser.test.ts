@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { IUserRepository } from "../../../src/domain/repositories/IUserRepository";
 import { CreateUser } from "../../../src/application/useCases/CreateUser.js";
 import { EmailAlreadyInUseError } from "../../../src/domain/erros/EmailAlreadyInUseError.js";
+import { ICryptoService } from "../../../src/application/services/ICryptoService";
 
 describe("CreateUser use case", () => {
   const userRepository: IUserRepository = {
@@ -16,11 +17,23 @@ describe("CreateUser use case", () => {
     },
     async updateUserTopics(id, topics) {},
   };
+  const cryptoService: ICryptoService = {
+    encrypt() {
+      return {
+        authTag: "",
+        ciphertext: "",
+        iv: "",
+      };
+    },
+    decrypt() {
+      return "";
+    },
+  };
   it("should not allow create user if the email is already beign used", async () => {
     mock.method(userRepository, "create", () => {
       throw new EmailAlreadyInUseError("johndoe@gmail.com");
     });
-    const createUser = new CreateUser(userRepository);
+    const createUser = new CreateUser(userRepository, cryptoService);
     await assert.rejects(
       createUser.execute({
         email: "johndoe@gmail.com",
@@ -37,7 +50,7 @@ describe("CreateUser use case", () => {
     const createMock = mock.method(userRepository, "create", () => {
       return Promise.resolve();
     });
-    const createUser = new CreateUser(userRepository);
+    const createUser = new CreateUser(userRepository, cryptoService);
     await assert.doesNotReject(
       createUser.execute({
         email: "johndoe@gmail.com",
