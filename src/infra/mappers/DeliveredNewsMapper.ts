@@ -6,6 +6,7 @@ export class DeliveredNewsMapper {
       link: raw.link,
       topic: raw.topic,
       userId: raw.userId,
+      sentAt: raw.sentAt,
     });
   }
   static toPersistence(deliveredNews: DeliveredNews) {
