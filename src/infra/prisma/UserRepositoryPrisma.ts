@@ -1,4 +1,6 @@
 import { PrismaClient, Prisma } from "../../../generated/prisma/client.js";
+import { EncrytedPayload } from "../../application/dtos/CryptoServiceDTO.js";
+import { ICryptoService } from "../../application/services/ICryptoService.js";
 import { User } from "../../domain/entities/User.js";
 import { EmailAlreadyInUseError } from "../../domain/erros/EmailAlreadyInUseError.js";
 import { UserNotFoundError } from "../../domain/erros/UserNotFoundError.js";
@@ -8,11 +10,14 @@ import { RepositoryError } from "../errors/RepositoryError.js";
 import { UserMapper } from "../mappers/UserMapper.js";
 
 export class UserRepositoryPrisma implements IUserRepository {
-  constructor(private readonly prismaClient: PrismaClient) {}
-  async create(user: User): Promise<void> {
+  constructor(
+    private readonly prismaClient: PrismaClient,
+    private readonly cryptoService: ICryptoService
+  ) {}
+  async create(user: User, encrypted?: EncrytedPayload): Promise<void> {
     try {
       await this.prismaClient.user.create({
-        data: UserMapper.toPersistence(user),
+        data: UserMapper.toPersistence(user, encrypted),
       });
     } catch (error: any) {
       if (
@@ -51,7 +56,14 @@ export class UserRepositoryPrisma implements IUserRepository {
           deliveredNews: true,
         },
       });
-      return UserMapper.toDomain(user);
+      const decryptedTelegramChatId = user.telegramChatCiphertext
+        ? this.cryptoService.decrypt({
+            ciphertext: user.telegramChatCiphertext,
+            authTag: user.telegramChatAuthTag!,
+            iv: user.telegramChatIv!,
+          })
+        : undefined;
+      return UserMapper.toDomain(user, decryptedTelegramChatId);
     } catch (error: any) {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
@@ -73,7 +85,14 @@ export class UserRepositoryPrisma implements IUserRepository {
           deliveredNews: true,
         },
       });
-      return UserMapper.toDomain(user);
+      const decryptedTelegramChatId = user.telegramChatCiphertext
+        ? this.cryptoService.decrypt({
+            ciphertext: user.telegramChatCiphertext,
+            authTag: user.telegramChatAuthTag!,
+            iv: user.telegramChatIv!,
+          })
+        : undefined;
+      return UserMapper.toDomain(user, decryptedTelegramChatId);
     } catch (error: any) {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
@@ -85,11 +104,11 @@ export class UserRepositoryPrisma implements IUserRepository {
       throw new RepositoryError("Failed to find user by id", error);
     }
   }
-  async updateUserTopics(id: string, topics: string[]): Promise<void> {
+  async updateUserTopics(email: string, topics: string[]): Promise<void> {
     try {
       await this.prismaClient.user.update({
         where: {
-          id,
+          email,
         },
         data: { topics },
       });
