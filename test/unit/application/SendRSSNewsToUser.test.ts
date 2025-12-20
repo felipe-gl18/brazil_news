@@ -8,7 +8,7 @@ import { News } from "../../../src/domain/entities/News.js";
 import { SendRSSNewsToUser } from "../../../src/application/useCases/SendRSSNewsToUser.js";
 import assert from "node:assert/strict";
 import { Email } from "../../../src/domain/valueObjects/Email.js";
-import { WhatsApp } from "../../../src/domain/valueObjects/WhatsApp.js";
+import { TelegramChatId } from "../../../src/domain/valueObjects/TelegramChatId.js";
 
 describe("SendRSSNewsToUser use case", () => {
   const userRepository: IUserRepository = {
@@ -33,16 +33,16 @@ describe("SendRSSNewsToUser use case", () => {
     async deleteByUser(userId) {},
     async saveMany() {},
   };
-  const fetchRSSService: IFetchNewsService = {
+  const fetchNewsService: IFetchNewsService = {
     async fetchLatestNews(topics) {
       return [
-        new News({
+        {
           content: "content",
           link: "",
           publishedAt: new Date(),
           title: "title",
           topic: "fitness",
-        }),
+        },
       ];
     },
   };
@@ -59,7 +59,7 @@ describe("SendRSSNewsToUser use case", () => {
     const sendRSSNewsToUser = new SendRSSNewsToUser(
       userRepository,
       deliveredNewsRepository,
-      fetchRSSService,
+      fetchNewsService,
       emailNotificationService
     );
     await assert.rejects(sendRSSNewsToUser.execute("id"), UserNotFoundError);
@@ -68,19 +68,19 @@ describe("SendRSSNewsToUser use case", () => {
     mock.method(userRepository, "findById", () => {
       return {
         email: new Email("johndoe@gmail.com"),
-        whatsapp: new WhatsApp("+5588992048450"),
+        telegramChatId: new TelegramChatId("5588992048450"),
         topics: ["fitness"],
       };
     });
-    mock.method(fetchRSSService, "fetchLatestNews", () => {
+    mock.method(fetchNewsService, "fetchLatestNews", () => {
       return [
-        new News({
+        {
           content: "content",
           link: "link",
           title: "title",
           publishedAt: new Date(),
           topic: "fitness",
-        }),
+        },
       ];
     });
     const saveManyMock = mock.method(
@@ -93,26 +93,35 @@ describe("SendRSSNewsToUser use case", () => {
       "notify",
       () => {}
     );
-    const sendNewsWhatsAppMock = mock.method(
-      emailNotificationService,
+    const sendNewsTelegramMock = mock.method(
+      telegramNotificationService,
       "notify",
       () => {}
     );
-    const sendRSSNewsToUser = new SendRSSNewsToUser(
+    const sendRSSNewsToUserEmail = new SendRSSNewsToUser(
       userRepository,
       deliveredNewsRepository,
-      fetchRSSService,
+      fetchNewsService,
       emailNotificationService
     );
-    await assert.doesNotReject(sendRSSNewsToUser.execute("id"));
-    assert.equal(saveManyMock.mock.calls[0].arguments[1], "id");
-    assert.equal(
-      sendNewsEmailMock.mock.calls[0].arguments[0],
-      "johndoe@gmail.com"
+    await assert.doesNotReject(sendRSSNewsToUserEmail.execute("id"));
+    assert.deepEqual(sendNewsEmailMock.mock.calls[0].arguments[0]?.recipient, {
+      email: "johndoe@gmail.com",
+      telegramChatId: "5588992048450",
+    });
+    const sendRSSNewsToUserTelegram = new SendRSSNewsToUser(
+      userRepository,
+      deliveredNewsRepository,
+      fetchNewsService,
+      telegramNotificationService
     );
-    assert.equal(
-      sendNewsWhatsAppMock.mock.calls[0].arguments[0],
-      "+5588992048450"
+    await assert.doesNotReject(sendRSSNewsToUserTelegram.execute("id"));
+    assert.deepEqual(
+      sendNewsTelegramMock.mock.calls[0].arguments[0]?.recipient,
+      {
+        email: "johndoe@gmail.com",
+        telegramChatId: "5588992048450",
+      }
     );
   });
 });
