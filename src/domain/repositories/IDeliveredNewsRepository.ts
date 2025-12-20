@@ -2,7 +2,7 @@ import { DeliveredNews } from "../entities/DeliveredNews.js";
 export interface IDeliveredNewsRepository {
   findAll(): Promise<DeliveredNews[] | null>;
   findByUser(userId: string): Promise<DeliveredNews[] | null>;
-  save(deliveredNews: DeliveredNews, userId: string): Promise<void>;
-  saveMany(deliveredNews: DeliveredNews[], userId: string): Promise<void>;
+  save(deliveredNews: DeliveredNews): Promise<void>;
+  saveMany(deliveredNews: DeliveredNews[]): Promise<void>;
   deleteByUser(userId: string): Promise<void>;
 }
