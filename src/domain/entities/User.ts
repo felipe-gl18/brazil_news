@@ -1,10 +1,10 @@
 import { Email } from "../valueObjects/Email.js";
-import { WhatsApp } from "../valueObjects/WhatsApp.js";
+import { TelegramChatId } from "../valueObjects/TelegramChatId.js";
 
 interface UserProps {
   name: string;
   email: Email;
-  whatsapp?: WhatsApp;
+  telegramChatId?: TelegramChatId;
   topics: string[];
 }
 
@@ -31,8 +31,8 @@ export class User {
   get email() {
     return this.props.email;
   }
-  get whatsapp() {
-    return this.props.whatsapp;
+  get telegramChatId() {
+    return this.props.telegramChatId;
   }
   get name() {
     return this.props.name;
@@ -40,7 +40,6 @@ export class User {
   get topics() {
     return this.props.topics;
   }
-
   updateTopics(topics: string[]) {
     if (topics.length === 0)
       throw new Error("User must have at least one topic");
