@@ -70,7 +70,10 @@ export class DeliveredNewsRepositoryPrisma implements IDeliveredNewsRepository {
   async saveMany(deliveredNews: DeliveredNews[]): Promise<void> {
     try {
       await this.prismaClient.deliveredNews.createMany({
-        data: deliveredNews,
+        data: deliveredNews.map((item) =>
+          DeliveredNewsMapper.toPersistence(item)
+        ),
+        skipDuplicates: true,
       });
     } catch (error: any) {
       if (
