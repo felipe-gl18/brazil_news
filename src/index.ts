@@ -12,15 +12,20 @@ import { EmailNotificationService } from "./infra/services/EmailNotificationServ
 import { FindUserDeliveredNews } from "./application/useCases/FindUserDeliveredNews.js";
 import { FindDeliveredNews } from "./application/useCases/FindDeliveredNews.js";
 import { DeleteUser } from "./application/useCases/DeleteUser.js";
+import { NodeCryptoService } from "./infra/services/NodeCryptoService.js";
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL!,
 });
 const prismaClient = new PrismaClient({ adapter });
-const userRepository = new UserRepositoryPrisma(prismaClient);
+const nodeCryptoService = new NodeCryptoService();
+const userRepository = new UserRepositoryPrisma(
+  prismaClient,
+  nodeCryptoService
+);
 const deliveredNewsRepository = new DeliveredNewsRepositoryPrisma(prismaClient);
 const rSSFetchNewsService = new RSSFetchNewsService();
 const emailNotificationService = new EmailNotificationService();
-const createUser = new CreateUser(userRepository);
+const createUser = new CreateUser(userRepository, nodeCryptoService);
 const findUser = new FindUser(userRepository);
 const updateUserTopics = new UpdateUserTopcis(userRepository);
 const sendRSSNewsToUser = new SendRSSNewsToUser(
