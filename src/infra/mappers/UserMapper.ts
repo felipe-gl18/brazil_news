@@ -1,20 +1,27 @@
+import { EncrytedPayload } from "../../application/dtos/CryptoServiceDTO.js";
 import { User } from "../../domain/entities/User.js";
+import { Email } from "../../domain/valueObjects/Email.js";
+import { TelegramChatId } from "../../domain/valueObjects/TelegramChatId.js";
 
 export class UserMapper {
-  static toDomain(raw: any) {
+  static toDomain(raw: any, decryptedTelegramChatId?: string) {
     return new User({
-      email: raw.email,
+      email: new Email(raw.email),
       name: raw.name,
       topics: raw.topics,
-      whatsapp: raw.whatsapp,
+      telegramChatId: decryptedTelegramChatId
+        ? new TelegramChatId(decryptedTelegramChatId)
+        : undefined,
     });
   }
-  static toPersistence(user: User) {
+  static toPersistence(user: User, encrypted?: EncrytedPayload) {
     return {
       name: user.name,
       email: user.email.valueOf,
       topics: user.topics,
-      whatsapp: user.whatsapp?.valueOf,
+      telegramChatCiphertext: encrypted?.ciphertext,
+      telegramChatIv: encrypted?.iv,
+      telegramChatAuthTag: encrypted?.authTag,
     };
   }
 }
