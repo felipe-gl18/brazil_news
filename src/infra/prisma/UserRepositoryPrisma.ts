@@ -104,11 +104,11 @@ export class UserRepositoryPrisma implements IUserRepository {
       throw new RepositoryError("Failed to find user by id", error);
     }
   }
-  async updateUserTopics(email: string, topics: string[]): Promise<void> {
+  async updateUserTopics(id: string, topics: string[]): Promise<void> {
     try {
       await this.prismaClient.user.update({
         where: {
-          email,
+          id,
         },
         data: { topics },
       });
