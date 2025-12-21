@@ -3,8 +3,6 @@ import {
   NotificationPayloadDTO,
 } from "../../application/dtos/NotificationDTO";
 import { INotificationService } from "../../application/services/INotificationService";
-import { News } from "../../domain/entities/News";
-import { User } from "../../domain/entities/User";
 
 export class TelegramNotificationService implements INotificationService {
   private readonly botToken = process.env.TELEGRAM_BOT_TOKEN;
