@@ -30,6 +30,29 @@ export class UserRepositoryPrisma implements IUserRepository {
       throw new RepositoryError("Failed to create user", error);
     }
   }
+  async findAll(): Promise<User[] | null> {
+    try {
+      const user = await this.prismaClient.user.findMany({
+        include: {
+          deliveredNews: true,
+        },
+      });
+      return user.map((user) => {
+        const decryptedTelegramChatId = user.telegramChatCiphertext
+          ? this.cryptoService.decrypt({
+              ciphertext: user.telegramChatCiphertext,
+              authTag: user.telegramChatAuthTag!,
+              iv: user.telegramChatIv!,
+            })
+          : undefined;
+        return UserMapper.toDomain(user, decryptedTelegramChatId);
+      });
+    } catch (error: any) {
+      if (error instanceof Prisma.PrismaClientInitializationError)
+        throw new DatabaseError("Failed to create user", error);
+      throw new RepositoryError("Failed to find user by email", error);
+    }
+  }
   async deleteById(id: string): Promise<void> {
     try {
       await this.prismaClient.user.delete({
@@ -102,6 +125,31 @@ export class UserRepositoryPrisma implements IUserRepository {
       if (error instanceof Prisma.PrismaClientInitializationError)
         throw new DatabaseError("Failed to create user", error);
       throw new RepositoryError("Failed to find user by id", error);
+    }
+  }
+  async findUsersToNotify(now: Date): Promise<User[] | null> {
+    try {
+      const user = await this.prismaClient.user.findMany({
+        where: {
+          deliveryTime: {
+            lte: now,
+          },
+        },
+      });
+      return user.map((user) => {
+        const decryptedTelegramChatId = user.telegramChatCiphertext
+          ? this.cryptoService.decrypt({
+              ciphertext: user.telegramChatCiphertext,
+              authTag: user.telegramChatAuthTag!,
+              iv: user.telegramChatIv!,
+            })
+          : undefined;
+        return UserMapper.toDomain(user, decryptedTelegramChatId);
+      });
+    } catch (error: any) {
+      if (error instanceof Prisma.PrismaClientInitializationError)
+        throw new DatabaseError("Failed to create user", error);
+      throw new RepositoryError("Failed to find user by email", error);
     }
   }
   async save(user: User): Promise<void> {
