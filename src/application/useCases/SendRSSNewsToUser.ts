@@ -24,7 +24,6 @@ export class SendRSSNewsToUser {
     const deliveredNews = releventNews.map((news) =>
       RSSNewsMapper.toDeliveredNews(news, userId)
     );
-    await this.deliveredNewsRepository.saveMany(deliveredNews);
     const recipient = {
       email: foundUser!.email.valueOf,
       telegramChatId: foundUser!.telegramChatId?.valueOf,
@@ -33,5 +32,6 @@ export class SendRSSNewsToUser {
       news: releventNews,
       recipient,
     });
+    await this.deliveredNewsRepository.saveMany(deliveredNews);
   }
 }
