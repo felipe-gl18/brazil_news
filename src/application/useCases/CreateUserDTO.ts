@@ -3,4 +3,6 @@ export interface CreateUserDTO {
   email: string;
   topics: string[];
   telegramChatId?: string;
+  deliveryTime: string;
+  timezone: string;
 }
