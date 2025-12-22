@@ -8,10 +8,12 @@ export class DeliveredNews {
   private props: DeliveredNewsProps;
   private _id?: string;
 
-  constructor(props: DeliveredNewsProps) {
+  constructor(props: DeliveredNewsProps, id?: string) {
     if (!props.link?.trim()) throw new Error("Link cannot be empty");
     if (!props.topic?.trim()) throw new Error("Topic cannot be empty");
     if (!props.userId?.trim()) throw new Error("UserId cannot be empty");
+
+    this._id = id && this.Id;
     this.props = props;
   }
 
