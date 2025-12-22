@@ -5,6 +5,10 @@ interface UserProps {
   name: string;
   email: Email;
   telegramChatId?: TelegramChatId;
+  deliveryTime: Date;
+  timezone: string;
+  createdAt?: Date;
+  updatedAt?: Date;
   topics: string[];
 }
 
@@ -12,11 +16,13 @@ export class User {
   private props: UserProps;
   private _id?: string;
 
-  constructor(props: UserProps) {
+  constructor(props: UserProps, id?: string) {
     if (!props.name?.trim()) throw new Error("Name cannot be empty");
+    if (!props.email.valueOf.trim()) throw new Error("Email must not be empty");
     if (!props.topics || props.topics.length === 0)
       throw new Error("User must have at least one topic");
 
+    this._id = id && id;
     this.props = props;
   }
 
@@ -24,7 +30,6 @@ export class User {
     if (this._id) throw new Error("ID has already been set");
     this._id = id;
   }
-
   get id() {
     return this._id;
   }
@@ -40,10 +45,35 @@ export class User {
   get topics() {
     return this.props.topics;
   }
-  updateTopics(topics: string[]) {
+  get deliveryTime() {
+    return this.props.deliveryTime;
+  }
+  get timezone() {
+    return this.props.timezone;
+  }
+  get createdAt() {
+    return this.props.createdAt;
+  }
+  get setdAt() {
+    return this.props.updatedAt;
+  }
+  setName(name: string) {
+    if (!name) throw new Error("Name can't be empty");
+    this.props.name = name;
+  }
+  setEmail(email: Email) {
+    this.props.email = email;
+  }
+  setDeliveryTime(time: Date) {
+    this.props.deliveryTime = time;
+  }
+  setTimezone(timezone: string) {
+    if (!timezone) throw new Error("Timezone can't be empty");
+    this.props.timezone = timezone;
+  }
+  setTopics(topics: string[]) {
     if (topics.length === 0)
       throw new Error("User must have at least one topic");
-
     this.props.topics = topics;
   }
 }
