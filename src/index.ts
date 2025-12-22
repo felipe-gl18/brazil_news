@@ -4,7 +4,7 @@ import { CreateUser } from "./application/useCases/CreateUser.js";
 import { UserRepositoryPrisma } from "./infra/prisma/UserRepositoryPrisma.js";
 import "dotenv/config.js";
 import { FindUser } from "./application/useCases/FindUser.js";
-import { UpdateUserTopcis } from "./application/useCases/UpdateUserTopics.js";
+import { UpdateUser } from "./application/useCases/UpdateUser.js";
 import { SendRSSNewsToUser } from "./application/useCases/SendRSSNewsToUser.js";
 import { DeliveredNewsRepositoryPrisma } from "./infra/prisma/DeliveredNewsRepositoryPrisma.js";
 import { RSSFetchNewsService } from "./infra/services/RSSFetchNewsService.js";
@@ -27,7 +27,7 @@ const rSSFetchNewsService = new RSSFetchNewsService();
 const emailNotificationService = new EmailNotificationService();
 const createUser = new CreateUser(userRepository, nodeCryptoService);
 const findUser = new FindUser(userRepository);
-const updateUserTopics = new UpdateUserTopcis(userRepository);
+const updateUser = new UpdateUser(userRepository);
 const sendRSSNewsToUser = new SendRSSNewsToUser(
   userRepository,
   deliveredNewsRepository,
@@ -41,7 +41,7 @@ const findDeliveredNews = new FindDeliveredNews(deliveredNewsRepository);
 const deleteUser = new DeleteUser(userRepository);
 // create user
 // find user
-// update user topics
+// update user
 // sendRSSNews
 // find user delivered news
 // find all delivered news
