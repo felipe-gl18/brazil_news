@@ -22,6 +22,8 @@ model User {
   telegramChatAuthTag    String?
   topics                 String[]
   deliveredNews          DeliveredNews[]
+  deliveryTime           DateTime        @db.Time()
+  timezone               String
   createdAt              DateTime        @default(now())
   updatedAt              DateTime        @updatedAt
 }
