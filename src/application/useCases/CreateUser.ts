@@ -25,6 +25,8 @@ export class CreateUser {
       email,
       telegramChatId,
       topics: data.topics,
+      deliveryTime: new Date(data.deliveryTime),
+      timezone: data.timezone,
     });
 
     await this.userRepository.create(user, encryptedTelegramChatId);
