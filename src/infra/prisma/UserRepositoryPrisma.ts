@@ -48,7 +48,7 @@ export class UserRepositoryPrisma implements IUserRepository {
       throw new RepositoryError("Failed to delete user", error);
     }
   }
-  async findByEmail(email: string): Promise<User | null> {
+  async findByEmail(email: string): Promise<User> {
     try {
       const user = await this.prismaClient.user.findUniqueOrThrow({
         where: { email },
@@ -75,7 +75,7 @@ export class UserRepositoryPrisma implements IUserRepository {
       throw new RepositoryError("Failed to find user by email", error);
     }
   }
-  async findById(id: string): Promise<User | null> {
+  async findById(id: string): Promise<User> {
     try {
       const user = await this.prismaClient.user.findUniqueOrThrow({
         where: {
@@ -104,13 +104,13 @@ export class UserRepositoryPrisma implements IUserRepository {
       throw new RepositoryError("Failed to find user by id", error);
     }
   }
-  async updateUserTopics(id: string, topics: string[]): Promise<void> {
+  async save(user: User): Promise<void> {
     try {
       await this.prismaClient.user.update({
         where: {
-          id,
+          id: user.id,
         },
-        data: { topics },
+        data: UserMapper.toPersistence(user),
       });
     } catch (error: any) {
       if (
@@ -119,8 +119,8 @@ export class UserRepositoryPrisma implements IUserRepository {
       )
         throw new UserNotFoundError();
       if (error instanceof Prisma.PrismaClientInitializationError)
-        throw new DatabaseError("Failed to create user", error);
-      throw new RepositoryError("Failed to update user topics", error);
+        throw new DatabaseError("Failed to save user", error);
+      throw new RepositoryError("Failed to save user", error);
     }
   }
 }
