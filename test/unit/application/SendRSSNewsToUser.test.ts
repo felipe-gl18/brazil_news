@@ -4,23 +4,30 @@ import { IDeliveredNewsRepository } from "../../../src/domain/repositories/IDeli
 import { IFetchNewsService } from "../../../src/application/services/IFetchNewsService";
 import { INotificationService } from "../../../src/application/services/INotificationService";
 import { UserNotFoundError } from "../../../src/domain/erros/UserNotFoundError.js";
-import { News } from "../../../src/domain/entities/News.js";
 import { SendRSSNewsToUser } from "../../../src/application/useCases/SendRSSNewsToUser.js";
 import assert from "node:assert/strict";
 import { Email } from "../../../src/domain/valueObjects/Email.js";
 import { TelegramChatId } from "../../../src/domain/valueObjects/TelegramChatId.js";
+import { User } from "../../../src/domain/entities/User.js";
 
 describe("SendRSSNewsToUser use case", () => {
+  const user = {
+    email: new Email("johndoe@gmail.com"),
+    name: "John Doe",
+    topics: ["fitness"],
+    deliveryTime: new Date(),
+    timezone: "south-america",
+  };
   const userRepository: IUserRepository = {
     async create(user) {},
     async deleteById(id) {},
     async findByEmail(email) {
-      return null;
+      return new User(user);
     },
     async findById(id) {
-      return null;
+      return new User(user);
     },
-    async updateUserTopics(id, topics) {},
+    async save(user) {},
   };
   const deliveredNewsRepository: IDeliveredNewsRepository = {
     async findAll() {

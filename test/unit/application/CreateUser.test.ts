@@ -4,18 +4,27 @@ import { IUserRepository } from "../../../src/domain/repositories/IUserRepositor
 import { CreateUser } from "../../../src/application/useCases/CreateUser.js";
 import { EmailAlreadyInUseError } from "../../../src/domain/erros/EmailAlreadyInUseError.js";
 import { ICryptoService } from "../../../src/application/services/ICryptoService";
+import { User } from "../../../src/domain/entities/User.js";
+import { Email } from "../../../src/domain/valueObjects/Email.js";
 
 describe("CreateUser use case", () => {
+  const user = {
+    email: new Email("johndoe@gmail.com"),
+    name: "John Doe",
+    topics: ["fitness"],
+    deliveryTime: new Date(),
+    timezone: "south-america",
+  };
   const userRepository: IUserRepository = {
     async create(user) {},
     async deleteById(id) {},
     async findByEmail(email) {
-      return null;
+      return new User(user);
     },
     async findById(id) {
-      return null;
+      return new User(user);
     },
-    async updateUserTopics(id, topics) {},
+    async save(user) {},
   };
   const cryptoService: ICryptoService = {
     encrypt() {
@@ -39,6 +48,8 @@ describe("CreateUser use case", () => {
         email: "johndoe@gmail.com",
         name: "John Doe",
         topics: ["fitness"],
+        deliveryTime: "2025-12-21T18:30:00.000Z",
+        timezone: "south-america",
       }),
       EmailAlreadyInUseError
     );
@@ -56,6 +67,8 @@ describe("CreateUser use case", () => {
         email: "johndoe@gmail.com",
         name: "John Doe",
         topics: ["health"],
+        deliveryTime: "2025-12-21T18:30:00.000Z",
+        timezone: "south-america",
       })
     );
     assert.equal(createMock.mock.calls.length, 1);

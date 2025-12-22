@@ -7,30 +7,28 @@ import { NewsFilterService } from "../../../src/domain/services/NewsFilterServic
 
 describe("NewsFilterService Domain Tests", () => {
   it("should return true if user interests match news topics", () => {
-    const email = new Email("a@b.com");
-    const user = new User({
-      name: "John Doe",
-      email,
-      topics: ["fitness", "health", "technology"],
-    });
     const news = new News({
       title: "Node.js Tips",
       content: "Learn advanced Node.js patterns",
-      topic: "fitness",
+      topic: "technology",
       publishedAt: new Date(),
       link: "",
     });
-
-    const result = NewsFilterService.matchUserInterests(user, news);
+    const result = NewsFilterService.matchUserInterests(
+      new User({
+        name: "John Doe",
+        email: new Email("a@b.com"),
+        topics: ["technology"],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        deliveryTime: new Date(),
+        timezone: "south-america",
+      }),
+      news
+    );
     assert.equal(result, true);
   });
   it("should return false if user interests do not match news topics", () => {
-    const email = new Email("a@b.com");
-    const user = new User({
-      name: "John Doe",
-      email,
-      topics: ["fitness", "health", "technology"],
-    });
     const news = new News({
       title: "Node.js Tips",
       content: "Learn advanced Node.js patterns",
@@ -39,7 +37,18 @@ describe("NewsFilterService Domain Tests", () => {
       link: "",
     });
 
-    const result = NewsFilterService.matchUserInterests(user, news);
+    const result = NewsFilterService.matchUserInterests(
+      new User({
+        name: "John Doe",
+        email: new Email("a@b.com"),
+        topics: ["technology"],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        deliveryTime: new Date(),
+        timezone: "south-america",
+      }),
+      news
+    );
     assert.equal(result, false);
   });
 });
