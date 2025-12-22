@@ -15,8 +15,14 @@ describe("UpdatedUserTopics use case", () => {
     timezone: "south-america",
   };
   const userRepository: IUserRepository = {
+    async findUsersToNotify(now) {
+      return null;
+    },
     async create(user) {},
     async deleteById(id) {},
+    async findAll() {
+      return null;
+    },
     async findByEmail(email) {
       return new User(user);
     },
