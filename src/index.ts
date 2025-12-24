@@ -16,6 +16,8 @@ import { NodeCryptoService } from "./infra/services/NodeCryptoService.js";
 import { ScheduleUserDeliveredNews } from "./application/useCases/ScheduleUserDeliveredNews.js";
 import { NodeCronSchedulerService } from "./infra/services/NodeCronSchedulerService.js";
 import { BullMQQueueService } from "./infra/services/BullMQQueueService.js";
+import { CalculateNextDeliveryAt } from "./application/useCases/CalculateNextDeliveryAt.js";
+import { SystemDateService } from "./infra/services/SystemDateService.js";
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL!,
 });
@@ -30,7 +32,14 @@ const rSSFetchNewsService = new RSSFetchNewsService();
 const emailNotificationService = new EmailNotificationService();
 const nodeCronSchedulerService = new NodeCronSchedulerService();
 const bullMQQueueService = new BullMQQueueService();
-const createUser = new CreateUser(userRepository, nodeCryptoService);
+const systemDateService = new SystemDateService();
+const calculateNextDeliveryAt = new CalculateNextDeliveryAt();
+const createUser = new CreateUser(
+  userRepository,
+  nodeCryptoService,
+  systemDateService,
+  calculateNextDeliveryAt
+);
 const findUser = new FindUser(userRepository);
 const updateUser = new UpdateUser(userRepository);
 const sendRSSNewsToUser = new SendRSSNewsToUser(
@@ -47,7 +56,9 @@ const deleteUser = new DeleteUser(userRepository);
 const scheduleUserDeliveredNews = new ScheduleUserDeliveredNews(
   userRepository,
   nodeCronSchedulerService,
-  bullMQQueueService
+  bullMQQueueService,
+  systemDateService,
+  calculateNextDeliveryAt
 );
 // create user
 // find user
@@ -62,7 +73,7 @@ const scheduleUserDeliveredNews = new ScheduleUserDeliveredNews(
     email: "felipegadelha2004@gmail.com",
     topics: ["technology"],
     timezone: "America/Sao_Paulo",
-    deliveryTime: "1970-01-01T19:09:00",
+    deliveryTime: "1970-01-01T21:11:00",
   }); */
   await scheduleUserDeliveredNews.execute();
 })();
