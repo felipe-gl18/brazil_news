@@ -1,7 +1,3 @@
 export interface IScheduler {
-  schedule(
-    expression: string,
-    timezone: string,
-    task: () => Promise<void>
-  ): void;
+  schedule(expression: string, task: () => Promise<void>): void;
 }
