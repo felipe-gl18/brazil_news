@@ -7,6 +7,7 @@ interface UserProps {
   telegramChatId?: TelegramChatId;
   deliveryTime: Date;
   timezone: string;
+  nextDeliveryAt: Date;
   createdAt?: Date;
   updatedAt?: Date;
   topics: string[];
@@ -51,6 +52,9 @@ export class User {
   get timezone() {
     return this.props.timezone;
   }
+  get nextDeliveryAt() {
+    return this.props.nextDeliveryAt;
+  }
   get createdAt() {
     return this.props.createdAt;
   }
@@ -70,6 +74,9 @@ export class User {
   setTimezone(timezone: string) {
     if (!timezone) throw new Error("Timezone can't be empty");
     this.props.timezone = timezone;
+  }
+  setNextDeliveryAt(nextDeliveryAt: Date) {
+    this.props.nextDeliveryAt = nextDeliveryAt;
   }
   setTopics(topics: string[]) {
     if (topics.length === 0)
