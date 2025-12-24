@@ -14,8 +14,9 @@ export class ScheduleUserDeliveredNews {
   ) {}
   async execute(): Promise<void> {
     this.scheduler.schedule("*/1 * * * *", async () => {
-      const now = new Date();
-      const users = await this.userRepository.findUsersToNotify(now);
+      const users = await this.userRepository.findUsersToNotify(
+        this.dateService.now()
+      );
       if (!users) return;
       for (const user of users) {
         await this.queueService.addJob(user.id!);
