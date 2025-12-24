@@ -14,6 +14,7 @@ export class UserMapper {
           ? new TelegramChatId(decryptedTelegramChatId)
           : undefined,
         deliveryTime: raw.deliveryTime,
+        nextDeliveryAt: raw.nextDeliveryAt,
         timezone: raw.timezone,
       },
       raw.id
@@ -29,6 +30,7 @@ export class UserMapper {
       telegramChatAuthTag: encrypted?.authTag,
       deliveryTime: user.deliveryTime,
       timezone: user.timezone,
+      nextDeliveryAt: user.nextDeliveryAt,
     };
   }
 }
