@@ -23,6 +23,7 @@ describe("NewsFilterService Domain Tests", () => {
         updatedAt: new Date(),
         deliveryTime: new Date(),
         timezone: "south-america",
+        nextDeliveryAt: new Date(),
       }),
       news
     );
@@ -46,6 +47,7 @@ describe("NewsFilterService Domain Tests", () => {
         updatedAt: new Date(),
         deliveryTime: new Date(),
         timezone: "south-america",
+        nextDeliveryAt: new Date(),
       }),
       news
     );

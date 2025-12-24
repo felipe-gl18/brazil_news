@@ -15,6 +15,7 @@ describe("User Entity", () => {
           updatedAt: new Date(),
           deliveryTime: new Date(),
           timezone: "south-america",
+          nextDeliveryAt: new Date(),
         }),
       { message: "Name cannot be empty" }
     );
@@ -30,6 +31,7 @@ describe("User Entity", () => {
           updatedAt: new Date(),
           deliveryTime: new Date(),
           timezone: "south-america",
+          nextDeliveryAt: new Date(),
         }),
       {
         message: "User must have at least one topic",
@@ -47,6 +49,7 @@ describe("User Entity", () => {
           updatedAt: new Date(),
           deliveryTime: new Date(),
           timezone: "south-america",
+          nextDeliveryAt: new Date(),
         });
         user.setId("123");
         user.setId("456");
@@ -65,6 +68,7 @@ describe("User Entity", () => {
           updatedAt: new Date(),
           deliveryTime: new Date(),
           timezone: "south-america",
+          nextDeliveryAt: new Date(),
         }).setTopics([]),
       {
         message: "User must have at least one topic",
@@ -80,6 +84,7 @@ describe("User Entity", () => {
       updatedAt: new Date(),
       deliveryTime: new Date(),
       timezone: "south-america",
+      nextDeliveryAt: new Date(),
     });
     user.setId("123");
     assert.equal(user.id, "123");
@@ -93,6 +98,7 @@ describe("User Entity", () => {
       updatedAt: new Date(),
       deliveryTime: new Date(),
       timezone: "south-america",
+      nextDeliveryAt: new Date(),
     });
     user.setTopics(["fitness", "health"]);
   });
@@ -106,6 +112,7 @@ describe("User Entity", () => {
       updatedAt: new Date(),
       deliveryTime: new Date(),
       timezone: "south-america",
+      nextDeliveryAt: new Date(),
     });
     assert.equal(user.name, "John Doe");
     assert.equal(user.email.valueOf, "a@b.com");

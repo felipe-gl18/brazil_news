@@ -12,6 +12,7 @@ describe("FindUser use case", () => {
     topics: ["fitness"],
     deliveryTime: new Date(),
     timezone: "south-america",
+    nextDeliveryAt: new Date(),
   };
   const userRepository: IUserRepository = {
     async findUsersToNotify(now) {

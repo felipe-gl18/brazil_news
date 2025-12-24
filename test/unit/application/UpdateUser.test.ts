@@ -13,6 +13,7 @@ describe("UpdatedUserTopics use case", () => {
     topics: ["fitness"],
     deliveryTime: new Date(),
     timezone: "south-america",
+    nextDeliveryAt: new Date(),
   };
   const userRepository: IUserRepository = {
     async findUsersToNotify(now) {
@@ -56,6 +57,7 @@ describe("UpdatedUserTopics use case", () => {
           deliveryTime: new Date(),
           timezone: "south-america",
           topics: ["technology"],
+          nextDeliveryAt: new Date(),
         })
       );
     });

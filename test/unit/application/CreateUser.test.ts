@@ -6,6 +6,8 @@ import { EmailAlreadyInUseError } from "../../../src/domain/erros/EmailAlreadyIn
 import { ICryptoService } from "../../../src/application/services/ICryptoService";
 import { User } from "../../../src/domain/entities/User.js";
 import { Email } from "../../../src/domain/valueObjects/Email.js";
+import { CalculateNextDeliveryAt } from "../../../src/application/useCases/CalculateNextDeliveryAt.js";
+import { IDateService } from "../../../src/application/services/IDateService";
 
 describe("CreateUser use case", () => {
   const user = {
@@ -14,6 +16,7 @@ describe("CreateUser use case", () => {
     topics: ["fitness"],
     deliveryTime: new Date(),
     timezone: "south-america",
+    nextDeliveryAt: new Date(),
   };
   const userRepository: IUserRepository = {
     async findUsersToNotify(now) {
@@ -44,11 +47,22 @@ describe("CreateUser use case", () => {
       return "";
     },
   };
+  const systemDateService: IDateService = {
+    now() {
+      return new Date();
+    },
+  };
+  const calculateNextDeliveryAt = new CalculateNextDeliveryAt();
   it("should not allow create user if the email is already beign used", async () => {
     mock.method(userRepository, "create", () => {
       throw new EmailAlreadyInUseError("johndoe@gmail.com");
     });
-    const createUser = new CreateUser(userRepository, cryptoService);
+    const createUser = new CreateUser(
+      userRepository,
+      cryptoService,
+      systemDateService,
+      calculateNextDeliveryAt
+    );
     await assert.rejects(
       createUser.execute({
         email: "johndoe@gmail.com",
@@ -67,7 +81,12 @@ describe("CreateUser use case", () => {
     const createMock = mock.method(userRepository, "create", () => {
       return Promise.resolve();
     });
-    const createUser = new CreateUser(userRepository, cryptoService);
+    const createUser = new CreateUser(
+      userRepository,
+      cryptoService,
+      systemDateService,
+      calculateNextDeliveryAt
+    );
     await assert.doesNotReject(
       createUser.execute({
         email: "johndoe@gmail.com",
