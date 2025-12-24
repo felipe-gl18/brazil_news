@@ -9,7 +9,6 @@ export class BullMQQueueService implements IQueueService {
     this.queue = new Queue("notifications", { connection: this.connection });
   }
   async addJob(userId: string): Promise<void> {
-    console.log(userId);
     try {
       await this.queue.add(
         "notify-user",
