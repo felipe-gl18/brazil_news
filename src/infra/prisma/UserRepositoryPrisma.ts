@@ -131,7 +131,7 @@ export class UserRepositoryPrisma implements IUserRepository {
     try {
       const user = await this.prismaClient.user.findMany({
         where: {
-          deliveryTime: {
+          nextDeliveryAt: {
             lte: now,
           },
         },
