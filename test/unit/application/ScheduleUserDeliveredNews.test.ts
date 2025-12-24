@@ -10,6 +10,8 @@ import { IFetchNewsService } from "../../../src/application/services/IFetchNewsS
 import { IDeliveredNewsRepository } from "../../../src/domain/repositories/IDeliveredNewsRepository";
 import { INotificationService } from "../../../src/application/services/INotificationService";
 import { IQueueService } from "../../../src/application/services/IQueueService";
+import { CalculateNextDeliveryAt } from "../../../src/application/useCases/CalculateNextDeliveryAt.js";
+import { IDateService } from "../../../src/application/services/IDateService";
 
 describe("ScheduleUserDeliveredNews use case", () => {
   const user = {
@@ -18,6 +20,7 @@ describe("ScheduleUserDeliveredNews use case", () => {
     topics: ["fitness"],
     deliveryTime: new Date(),
     timezone: "America/Sao_Paulo",
+    nextDeliveryAt: new Date(),
   };
   const userRepository: IUserRepository = {
     async findUsersToNotify(now) {
@@ -37,7 +40,7 @@ describe("ScheduleUserDeliveredNews use case", () => {
     async save(user) {},
   };
   const nodeCronSchedulerService: IScheduler = {
-    async schedule(expression, timezone, task) {},
+    async schedule(expression, task) {},
   };
   const deliveredNewsRepository: IDeliveredNewsRepository = {
     async findAll() {
@@ -69,6 +72,11 @@ describe("ScheduleUserDeliveredNews use case", () => {
   const emailNotificationService: INotificationService = {
     async notify() {},
   };
+  const systemDateService: IDateService = {
+    now() {
+      return new Date();
+    },
+  };
   it("should allow scheduling user delivered news", async () => {
     mock.method(userRepository, "findAll", () => {
       return Promise.resolve([new User(user, "id")]);
@@ -84,14 +92,16 @@ describe("ScheduleUserDeliveredNews use case", () => {
       fetchNewsService,
       emailNotificationService
     );
+    const calculateNextDeliveryAt = new CalculateNextDeliveryAt();
     const scheduleUserDeliveredNews = new ScheduleUserDeliveredNews(
       userRepository,
       nodeCronSchedulerService,
-      bullmqQueueService
+      bullmqQueueService,
+      systemDateService,
+      calculateNextDeliveryAt
     );
     await assert.doesNotReject(scheduleUserDeliveredNews.execute());
-    const [expression, timezone, _] = scheduleMock.mock.calls[0].arguments;
+    const [expression, _] = scheduleMock.mock.calls[0].arguments;
     assert.equal(typeof expression, "string");
-    assert.equal(timezone, "America/Sao_Paulo");
   });
 });
