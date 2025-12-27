@@ -1,57 +1,12 @@
 import { describe, it, mock } from "node:test";
 import assert from "node:assert/strict";
-import { IUserRepository } from "../../../src/domain/repositories/IUserRepository";
 import { CreateUser } from "../../../src/application/useCases/CreateUser.js";
 import { EmailAlreadyInUseError } from "../../../src/domain/erros/EmailAlreadyInUseError.js";
-import { ICryptoService } from "../../../src/application/services/ICryptoService";
-import { User } from "../../../src/domain/entities/User.js";
-import { Email } from "../../../src/domain/valueObjects/Email.js";
 import { CalculateNextDeliveryAt } from "../../../src/application/useCases/CalculateNextDeliveryAt.js";
-import { IDateService } from "../../../src/application/services/IDateService";
-
+import { userRepository } from "../../mocked_repositories/user_repository.js";
+import { cryptoService } from "../../mocked_services/cryptoService.js";
+import { systemDateService } from "../../mocked_services/systemDateService.js";
 describe("CreateUser use case", () => {
-  const user = {
-    email: new Email("johndoe@gmail.com"),
-    name: "John Doe",
-    topics: ["fitness"],
-    deliveryTime: new Date(),
-    timezone: "south-america",
-    nextDeliveryAt: new Date(),
-  };
-  const userRepository: IUserRepository = {
-    async findUsersToNotify(now) {
-      return null;
-    },
-    async create(user) {},
-    async findAll() {
-      return null;
-    },
-    async deleteById(id) {},
-    async findByEmail(email) {
-      return new User(user);
-    },
-    async findById(id) {
-      return new User(user);
-    },
-    async save(user) {},
-  };
-  const cryptoService: ICryptoService = {
-    encrypt() {
-      return {
-        authTag: "",
-        ciphertext: "",
-        iv: "",
-      };
-    },
-    decrypt() {
-      return "";
-    },
-  };
-  const systemDateService: IDateService = {
-    now() {
-      return new Date();
-    },
-  };
   const calculateNextDeliveryAt = new CalculateNextDeliveryAt();
   it("should not allow create user if the email is already beign used", async () => {
     mock.method(userRepository, "create", () => {

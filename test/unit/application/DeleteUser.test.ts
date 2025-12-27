@@ -1,37 +1,10 @@
 import assert from "node:assert/strict";
 import { describe, it, mock } from "node:test";
-import { IUserRepository } from "../../../src/domain/repositories/IUserRepository";
 import { DeleteUser } from "../../../src/application/useCases/DeleteUser.js";
 import { UserNotFoundError } from "../../../src/domain/erros/UserNotFoundError.js";
-import { Email } from "../../../src/domain/valueObjects/Email.js";
-import { User } from "../../../src/domain/entities/User.js";
+import { userRepository } from "../../mocked_repositories/user_repository.js";
 
 describe("DeleteUser use case", () => {
-  const user = {
-    email: new Email("johndoe@gmail.com"),
-    name: "John Doe",
-    topics: ["fitness"],
-    deliveryTime: new Date(),
-    timezone: "south-america",
-    nextDeliveryAt: new Date(),
-  };
-  const userRepository: IUserRepository = {
-    async findUsersToNotify(now) {
-      return null;
-    },
-    async create(user) {},
-    async findAll() {
-      return null;
-    },
-    async deleteById(id) {},
-    async findByEmail(email) {
-      return new User(user);
-    },
-    async findById(id) {
-      return new User(user);
-    },
-    async save(user) {},
-  };
   it("should not allow delete user if user doesnt exist", async () => {
     mock.method(userRepository, "deleteById", () => {
       throw new UserNotFoundError();

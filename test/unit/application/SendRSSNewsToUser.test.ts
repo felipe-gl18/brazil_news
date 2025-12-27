@@ -1,71 +1,16 @@
 import { describe, it, mock } from "node:test";
-import { IUserRepository } from "../../../src/domain/repositories/IUserRepository";
-import { IDeliveredNewsRepository } from "../../../src/domain/repositories/IDeliveredNewsRepository";
-import { IFetchNewsService } from "../../../src/application/services/IFetchNewsService";
-import { INotificationService } from "../../../src/application/services/INotificationService";
 import { UserNotFoundError } from "../../../src/domain/erros/UserNotFoundError.js";
 import { SendRSSNewsToUser } from "../../../src/application/useCases/SendRSSNewsToUser.js";
 import assert from "node:assert/strict";
 import { Email } from "../../../src/domain/valueObjects/Email.js";
 import { TelegramChatId } from "../../../src/domain/valueObjects/TelegramChatId.js";
-import { User } from "../../../src/domain/entities/User.js";
+import { userRepository } from "../../mocked_repositories/user_repository.js";
+import { deliveredNewsRepository } from "../../mocked_repositories/deliveredNews_repository";
+import { fetchNewsService } from "../../mocked_services/fetchNewsService";
+import { emailNotificationService } from "../../mocked_services/emailNotificationService";
+import { telegramNotificationService } from "../../mocked_services/telegramNotificationService";
 
 describe("SendRSSNewsToUser use case", () => {
-  const user = {
-    email: new Email("johndoe@gmail.com"),
-    name: "John Doe",
-    topics: ["fitness"],
-    deliveryTime: new Date(),
-    timezone: "south-america",
-    nextDeliveryAt: new Date(),
-  };
-  const userRepository: IUserRepository = {
-    async findUsersToNotify(now) {
-      return null;
-    },
-    async create(user) {},
-    async findAll() {
-      return null;
-    },
-    async deleteById(id) {},
-    async findByEmail(email) {
-      return new User(user);
-    },
-    async findById(id) {
-      return new User(user);
-    },
-    async save(user) {},
-  };
-  const deliveredNewsRepository: IDeliveredNewsRepository = {
-    async findAll() {
-      return null;
-    },
-    async findByUser(userId) {
-      return null;
-    },
-    async save() {},
-    async deleteByUser(userId) {},
-    async saveMany() {},
-  };
-  const fetchNewsService: IFetchNewsService = {
-    async fetchLatestNews(topics) {
-      return [
-        {
-          content: "content",
-          link: "",
-          publishedAt: new Date(),
-          title: "title",
-          topic: "fitness",
-        },
-      ];
-    },
-  };
-  const emailNotificationService: INotificationService = {
-    async notify() {},
-  };
-  const telegramNotificationService: INotificationService = {
-    async notify() {},
-  };
   it("should not allow to send RSS news to user if it doesn't exist", async () => {
     mock.method(userRepository, "findById", () => {
       throw new UserNotFoundError();

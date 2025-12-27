@@ -3,19 +3,9 @@ import { IDeliveredNewsRepository } from "../../../src/domain/repositories/IDeli
 import { FindUserDeliveredNews } from "../../../src/application/useCases/FindUserDeliveredNews.js";
 import assert from "node:assert/strict";
 import { UserNotFoundError } from "../../../src/domain/erros/UserNotFoundError.js";
+import { deliveredNewsRepository } from "../../mocked_repositories/deliveredNews_repository";
 
 describe("FindUserDeliveredNews use case", () => {
-  const deliveredNewsRepository: IDeliveredNewsRepository = {
-    async findAll() {
-      return null;
-    },
-    async findByUser(userId) {
-      return null;
-    },
-    async save() {},
-    async deleteByUser(userId) {},
-    async saveMany() {},
-  };
   it("should not allow to fetch news if the user doesnt exist", async () => {
     mock.method(deliveredNewsRepository, "findByUser", () => {
       throw new UserNotFoundError();

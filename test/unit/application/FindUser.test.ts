@@ -1,36 +1,9 @@
 import { describe, it, mock } from "node:test";
 import assert from "node:assert/strict";
-import { IUserRepository } from "../../../src/domain/repositories/IUserRepository";
 import { FindUser } from "../../../src/application/useCases/FindUser.js";
 import { UserNotFoundError } from "../../../src/domain/erros/UserNotFoundError.js";
-import { Email } from "../../../src/domain/valueObjects/Email.js";
-import { User } from "../../../src/domain/entities/User.js";
+import { userRepository } from "../../mocked_repositories/user_repository.js";
 describe("FindUser use case", () => {
-  const user = {
-    email: new Email("johndoe@gmail.com"),
-    name: "John Doe",
-    topics: ["fitness"],
-    deliveryTime: new Date(),
-    timezone: "south-america",
-    nextDeliveryAt: new Date(),
-  };
-  const userRepository: IUserRepository = {
-    async findUsersToNotify(now) {
-      return null;
-    },
-    async create(user) {},
-    async findAll() {
-      return null;
-    },
-    async deleteById(id) {},
-    async findByEmail(email) {
-      return new User(user);
-    },
-    async findById(id) {
-      return new User(user);
-    },
-    async save(user) {},
-  };
   it("should not allow find user", async () => {
     mock.method(userRepository, "findByEmail", () => {
       throw new UserNotFoundError();
