@@ -4,5 +4,8 @@ const systemDateService: IDateService = {
   now() {
     return new Date();
   },
+  parseTimeString(timeString: string): Date {
+    return new Date(timeString);
+  },
 };
 export { systemDateService };
