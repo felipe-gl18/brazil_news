@@ -24,7 +24,7 @@ export class CreateUser {
       ? this.cryptoService.encrypt(telegramChatId.valueOf)
       : undefined;
 
-    const deliveryTime = new Date(data.deliveryTime);
+    const deliveryTime = this.dateService.parseTimeString(data.deliveryTime);
     const user = new User({
       name: data.name,
       email,
