@@ -1,3 +1,4 @@
 export interface IDateService {
-  now(): Date;
+  now(date?: string): Date;
+  parseTimeString(timeString: string): Date;
 }
