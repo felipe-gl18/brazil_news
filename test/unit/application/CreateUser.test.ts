@@ -8,6 +8,13 @@ import { cryptoService } from "../../mocked_services/cryptoService.js";
 import { systemDateService } from "../../mocked_services/systemDateService.js";
 describe("CreateUser use case", () => {
   const calculateNextDeliveryAt = new CalculateNextDeliveryAt();
+  const user = {
+    email: "johndoe@gmail.com",
+    name: "John Doe",
+    topics: ["fitness"],
+    deliveryTime: "2025-12-21T18:30:00.000Z",
+    timezone: "south-america",
+  };
   it("should not allow create user if the email is already beign used", async () => {
     mock.method(userRepository, "create", () => {
       throw new EmailAlreadyInUseError("johndoe@gmail.com");
@@ -18,16 +25,7 @@ describe("CreateUser use case", () => {
       systemDateService,
       calculateNextDeliveryAt
     );
-    await assert.rejects(
-      createUser.execute({
-        email: "johndoe@gmail.com",
-        name: "John Doe",
-        topics: ["fitness"],
-        deliveryTime: "2025-12-21T18:30:00.000Z",
-        timezone: "south-america",
-      }),
-      EmailAlreadyInUseError
-    );
+    await assert.rejects(createUser.execute(user), EmailAlreadyInUseError);
   });
   it("should allow create user", async () => {
     mock.method(userRepository, "findByEmail", () => {
@@ -42,15 +40,7 @@ describe("CreateUser use case", () => {
       systemDateService,
       calculateNextDeliveryAt
     );
-    await assert.doesNotReject(
-      createUser.execute({
-        email: "johndoe@gmail.com",
-        name: "John Doe",
-        topics: ["health"],
-        deliveryTime: "2025-12-21T18:30:00.000Z",
-        timezone: "south-america",
-      })
-    );
+    await assert.doesNotReject(createUser.execute(user));
     assert.equal(createMock.mock.calls.length, 1);
     const [createdUser] = createMock.mock.calls[0].arguments;
     assert.equal(createdUser?.name, "John Doe");
