@@ -3,16 +3,13 @@ import { SendRSSNewsToUser } from "../../../src/application/useCases/SendRSSNews
 import { User } from "../../../src/domain/entities/User.js";
 import assert from "node:assert/strict";
 import { ScheduleUserDeliveredNews } from "../../../src/application/useCases/ScheduleUserDeliveredNews.js";
-import { IFetchNewsService } from "../../../src/application/services/IFetchNewsService";
-import { INotificationService } from "../../../src/application/services/INotificationService";
 import { CalculateNextDeliveryAt } from "../../../src/application/useCases/CalculateNextDeliveryAt.js";
-import { IDateService } from "../../../src/application/services/IDateService";
 import {
   user,
   userRepository,
 } from "../../mocked_repositories/user_repository.js";
-import { deliveredNewsRepository } from "../../mocked_repositories/deliveredNews_repository";
-import { nodeCronSchedulerService } from "../../mocked_services/nodeCronSchedulerService";
+import { deliveredNewsRepository } from "../../mocked_repositories/deliveredNews_repository.js";
+import { nodeCronSchedulerService } from "../../mocked_services/nodeCronSchedulerService.js";
 import { bullmqQueueService } from "../../mocked_services/bullmqQueueService.js";
 import { fetchNewsService } from "../../mocked_services/fetchNewsService.js";
 import { emailNotificationService } from "../../mocked_services/emailNotificationService.js";

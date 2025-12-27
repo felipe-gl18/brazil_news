@@ -5,10 +5,10 @@ import assert from "node:assert/strict";
 import { Email } from "../../../src/domain/valueObjects/Email.js";
 import { TelegramChatId } from "../../../src/domain/valueObjects/TelegramChatId.js";
 import { userRepository } from "../../mocked_repositories/user_repository.js";
-import { deliveredNewsRepository } from "../../mocked_repositories/deliveredNews_repository";
-import { fetchNewsService } from "../../mocked_services/fetchNewsService";
-import { emailNotificationService } from "../../mocked_services/emailNotificationService";
-import { telegramNotificationService } from "../../mocked_services/telegramNotificationService";
+import { deliveredNewsRepository } from "../../mocked_repositories/deliveredNews_repository.js";
+import { fetchNewsService } from "../../mocked_services/fetchNewsService.js";
+import { emailNotificationService } from "../../mocked_services/emailNotificationService.js";
+import { telegramNotificationService } from "../../mocked_services/telegramNotificationService.js";
 
 describe("SendRSSNewsToUser use case", () => {
   it("should not allow to send RSS news to user if it doesn't exist", async () => {

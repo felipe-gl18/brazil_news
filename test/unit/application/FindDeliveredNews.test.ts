@@ -1,9 +1,8 @@
 import { describe, it, mock } from "node:test";
 import assert from "node:assert/strict";
-import { IDeliveredNewsRepository } from "../../../src/domain/repositories/IDeliveredNewsRepository";
 import { FindDeliveredNews } from "../../../src/application/useCases/FindDeliveredNews.js";
 import { RepositoryError } from "../../../src/infra/errors/RepositoryError.js";
-import { deliveredNewsRepository } from "../../mocked_repositories/deliveredNews_repository";
+import { deliveredNewsRepository } from "../../mocked_repositories/deliveredNews_repository.js";
 
 describe("FindDeliveredNews use case", () => {
   it("should not allow to fetch news", async () => {

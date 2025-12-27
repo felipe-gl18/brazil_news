@@ -1,9 +1,8 @@
 import { describe, it, mock } from "node:test";
-import { IDeliveredNewsRepository } from "../../../src/domain/repositories/IDeliveredNewsRepository";
 import { FindUserDeliveredNews } from "../../../src/application/useCases/FindUserDeliveredNews.js";
 import assert from "node:assert/strict";
 import { UserNotFoundError } from "../../../src/domain/erros/UserNotFoundError.js";
-import { deliveredNewsRepository } from "../../mocked_repositories/deliveredNews_repository";
+import { deliveredNewsRepository } from "../../mocked_repositories/deliveredNews_repository.js";
 
 describe("FindUserDeliveredNews use case", () => {
   it("should not allow to fetch news if the user doesnt exist", async () => {
