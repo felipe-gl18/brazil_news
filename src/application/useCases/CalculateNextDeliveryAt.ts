@@ -3,7 +3,6 @@ export class CalculateNextDeliveryAt {
   constructor() {}
   execute(now: Date, deliveryTime: Date, timezone: string) {
     const nowTz = new TZDate(now, timezone);
-    const deliveryTz = new TZDate(deliveryTime, timezone);
 
     // setting the nextDeliveryAt
     const next = new TZDate(nowTz, timezone);
