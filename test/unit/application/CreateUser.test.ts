@@ -9,11 +9,11 @@ import { systemDateService } from "../../mocked_services/systemDateService.js";
 describe("CreateUser use case", () => {
   const calculateNextDeliveryAt = new CalculateNextDeliveryAt();
   const user = {
-    email: "johndoe@gmail.com",
     name: "John Doe",
+    email: "johndoe@gmail.com",
     topics: ["fitness"],
     deliveryTime: "2025-12-21T18:30:00.000Z",
-    timezone: "south-america",
+    timezone: "South/America",
   };
   it("should not allow create user if the email is already beign used", async () => {
     mock.method(userRepository, "create", () => {
@@ -43,7 +43,10 @@ describe("CreateUser use case", () => {
     await assert.doesNotReject(createUser.execute(user));
     assert.equal(createMock.mock.calls.length, 1);
     const [createdUser] = createMock.mock.calls[0].arguments;
-    assert.equal(createdUser?.name, "John Doe");
-    assert.deepEqual(createdUser.topics, ["health"]);
+    assert.equal(createdUser?.name, user.name);
+    assert.equal(createdUser?.email.valueOf, user.email);
+    assert.equal(createdUser?.timezone, user.timezone);
+    assert.equal(createdUser?.deliveryTime.toISOString(), user.deliveryTime);
+    assert.deepEqual(createdUser.topics, user.topics);
   });
 });
