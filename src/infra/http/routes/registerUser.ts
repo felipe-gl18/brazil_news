@@ -32,6 +32,6 @@ const createUser = new CreateUser(
 );
 const registerUser = new RegisterUser(createUser);
 
-route.post("", async (req, res) => registerUser.handle(req, res));
+route.post("", async (req, res, next) => registerUser.handle(req, res, next));
 
 export { route as registerUserRoute };
