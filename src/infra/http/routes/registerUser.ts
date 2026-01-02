@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { RegisterUser } from "../controllers/RegisterUser.js";
+import { RegisterUserController } from "../controllers/RegisterUserController.js";
 import { CreateUser } from "../../../application/useCases/CreateUser.js";
 import { UserRepositoryPrisma } from "../../prisma/UserRepositoryPrisma.js";
 import { PrismaPg } from "@prisma/adapter-pg";
@@ -30,7 +30,7 @@ const createUser = new CreateUser(
   systemDateService,
   calculateNextDeliveryAt
 );
-const registerUser = new RegisterUser(createUser);
+const registerUser = new RegisterUserController(createUser);
 
 route.post("", async (req, res, next) => registerUser.handle(req, res, next));
 
