@@ -34,7 +34,7 @@ describe("User Entity", () => {
           nextDeliveryAt: new Date(),
         }),
       {
-        message: "User must have at least one topic",
+        message: "Topics cannot be empty",
       }
     );
   });
