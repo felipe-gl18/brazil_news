@@ -65,7 +65,6 @@ export class User {
     return this.props.updatedAt;
   }
   setName(name: string) {
-    if (!name) throw new Error("Name can't be empty");
     this.props.name = name;
   }
   setEmail(email: Email) {
@@ -75,15 +74,12 @@ export class User {
     this.props.deliveryTime = time;
   }
   setTimezone(timezone: string) {
-    if (!timezone) throw new Error("Timezone can't be empty");
     this.props.timezone = timezone;
   }
   setNextDeliveryAt(nextDeliveryAt: Date) {
     this.props.nextDeliveryAt = nextDeliveryAt;
   }
   setTopics(topics: string[]) {
-    if (topics.length === 0)
-      throw new Error("User must have at least one topic");
     this.props.topics = topics;
   }
 }
