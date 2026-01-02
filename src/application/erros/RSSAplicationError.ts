@@ -1,4 +1,6 @@
-export class RSSAplicationError extends Error {
+import { ApplicationError } from "./ApplicationError.js";
+export class RSSAplicationError extends ApplicationError {
+  statusCode = 500;
   constructor(message: string, cause?: unknown) {
     super(message, { cause });
     this.name = "RSSAplicationError";
