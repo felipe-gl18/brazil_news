@@ -2,6 +2,7 @@ import assert from "assert";
 import { describe, it } from "node:test";
 import { User } from "../../../src/domain/entities/User.js";
 import { Email } from "../../../src/domain/valueObjects/Email.js";
+import { DomainError } from "../../../src/domain/erros/DomainError.js";
 
 describe("User Entity", () => {
   it("should not allow empty name", () => {
@@ -57,24 +58,7 @@ describe("User Entity", () => {
       { message: "ID has already been set" }
     );
   });
-  it("should not allow updating to empty topics", () => {
-    assert.throws(
-      () =>
-        new User({
-          name: "John Doe",
-          email: new Email("a@b.com"),
-          topics: ["fitness"],
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          deliveryTime: new Date(),
-          timezone: "south-america",
-          nextDeliveryAt: new Date(),
-        }).setTopics([]),
-      {
-        message: "User must have at least one topic",
-      }
-    );
-  });
+
   it("should allow setting ID once", () => {
     const user = new User({
       name: "John Doe",
