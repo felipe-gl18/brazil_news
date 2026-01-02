@@ -1,7 +1,7 @@
 import { PrismaClient, Prisma } from "../../../generated/prisma/client.js";
 import { DeliveredNews } from "../../domain/entities/DeliveredNews.js";
-import { LinkAlreadyInUseError } from "../../domain/erros/LinkAlreadyInUse.js";
-import { UserNotFoundError } from "../../domain/erros/UserNotFoundError.js";
+import { LinkAlreadyInUseError } from "../../application/erros/LinkAlreadyInUse.js";
+import { UserNotFoundError } from "../../application/erros/UserNotFoundError.js";
 import { IDeliveredNewsRepository } from "../../domain/repositories/IDeliveredNewsRepository";
 import { DatabaseError } from "../errors/DatabaseError.js";
 import { RepositoryError } from "../errors/RepositoryError.js";
