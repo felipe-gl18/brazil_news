@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "start:dev": "npm run build && node dist/src/index.js",
+    "start:dev": "npm run build && node dist/src/infra/http/server.js",
     "test": "npm run build && node --test dist/test/**/*.test.js",
     "test:coverage": "npm run build && node --test --experimental-test-coverage dist/test/**/*.test.js",
     "test:debug": "npm run build && node --inspect --test --experimental-test-coverage --watch dist/test/**/*.test.js"
@@ -15,6 +15,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@types/express": "^5.0.6",
     "@types/node": "^24.10.1",
     "@types/nodemailer": "^7.0.4",
     "@types/pg": "^8.15.6",
@@ -29,6 +30,7 @@
     "@prisma/client": "^7.1.0",
     "bullmq": "^5.66.2",
     "dotenv": "^17.2.3",
+    "express": "^5.2.1",
     "install": "^0.13.0",
     "ioredis": "^5.8.2",
     "node-cron": "^4.2.1",
