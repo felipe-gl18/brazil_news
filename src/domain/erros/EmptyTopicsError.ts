@@ -1,5 +1,5 @@
-export class EmptyTopicsError extends Error {
-  statusCode = 400;
+import { DomainError } from "./DomainError.js";
+export class EmptyTopicsError extends DomainError {
   constructor() {
     super("Topics cannot be empty");
     this.name = "EmptyTopicsError";
