@@ -1,3 +1,6 @@
+import { EmptyEmailError } from "../erros/EmptyEmailError.js";
+import { EmptyNameError } from "../erros/EmptyNameError.js";
+import { EmptyTopicsError } from "../erros/EmptyTopicsError.js";
 import { Email } from "../valueObjects/Email.js";
 import { TelegramChatId } from "../valueObjects/TelegramChatId.js";
 
@@ -18,10 +21,10 @@ export class User {
   private _id?: string;
 
   constructor(props: UserProps, id?: string) {
-    if (!props.name?.trim()) throw new Error("Name cannot be empty");
-    if (!props.email.valueOf.trim()) throw new Error("Email must not be empty");
+    if (!props.name?.trim()) throw new EmptyNameError();
+    if (!props.email.valueOf.trim()) throw new EmptyEmailError();
     if (!props.topics || props.topics.length === 0)
-      throw new Error("User must have at least one topic");
+      throw new EmptyTopicsError();
 
     this._id = id && id;
     this.props = props;
