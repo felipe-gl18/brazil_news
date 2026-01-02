@@ -1,5 +1,5 @@
 import { describe, it, mock } from "node:test";
-import { UserNotFoundError } from "../../../src/domain/erros/UserNotFoundError.js";
+import { UserNotFoundError } from "../../../src/application/erros/UserNotFoundError.js";
 import { SendRSSNewsToUser } from "../../../src/application/useCases/SendRSSNewsToUser.js";
 import assert from "node:assert/strict";
 import { Email } from "../../../src/domain/valueObjects/Email.js";

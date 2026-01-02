@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it, mock } from "node:test";
 import { DeleteUser } from "../../../src/application/useCases/DeleteUser.js";
-import { UserNotFoundError } from "../../../src/domain/erros/UserNotFoundError.js";
+import { UserNotFoundError } from "../../../src/application/erros/UserNotFoundError.js";
 import { userRepository } from "../../mocked_repositories/user_repository.js";
 
 describe("DeleteUser use case", () => {

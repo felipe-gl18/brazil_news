@@ -1,7 +1,7 @@
 import { describe, it, mock } from "node:test";
 import assert from "node:assert/strict";
 import { CreateUser } from "../../../src/application/useCases/CreateUser.js";
-import { EmailAlreadyInUseError } from "../../../src/domain/erros/EmailAlreadyInUseError.js";
+import { EmailAlreadyInUseError } from "../../../src/application/erros/EmailAlreadyInUseError.js";
 import { CalculateNextDeliveryAt } from "../../../src/application/useCases/CalculateNextDeliveryAt.js";
 import { userRepository } from "../../mocked_repositories/user_repository.js";
 import { cryptoService } from "../../mocked_services/cryptoService.js";

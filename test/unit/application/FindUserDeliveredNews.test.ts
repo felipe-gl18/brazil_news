@@ -1,7 +1,7 @@
 import { describe, it, mock } from "node:test";
 import { FindUserDeliveredNews } from "../../../src/application/useCases/FindUserDeliveredNews.js";
 import assert from "node:assert/strict";
-import { UserNotFoundError } from "../../../src/domain/erros/UserNotFoundError.js";
+import { UserNotFoundError } from "../../../src/application/erros/UserNotFoundError.js";
 import { deliveredNewsRepository } from "../../mocked_repositories/deliveredNews_repository.js";
 
 describe("FindUserDeliveredNews use case", () => {
