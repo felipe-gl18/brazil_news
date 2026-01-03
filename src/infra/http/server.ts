@@ -3,13 +3,21 @@ import "dotenv/config";
 import { registerUserRoute } from "./routes/registerUser.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import { updateUserRoute } from "./routes/UpdateUser.js";
+import setupHandlebarsEngine from "./view-engine/handlebars.engine.js";
 
-const app = express();
+export const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+setupHandlebarsEngine(app);
 
 app.use("/register", registerUserRoute);
 app.use("/update", updateUserRoute);
+
+app.get("/", (req, res) => {
+  res.render("home");
+});
 
 app.use(errorHandler);
 
