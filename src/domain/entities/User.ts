@@ -1,5 +1,7 @@
+import { EmptyDeliveryTimeError } from "../erros/EmptyDeliveryTimeError.js";
 import { EmptyEmailError } from "../erros/EmptyEmailError.js";
 import { EmptyNameError } from "../erros/EmptyNameError.js";
+import { EmptyTimezoneError } from "../erros/EmptyTimezoneError.js";
 import { EmptyTopicsError } from "../erros/EmptyTopicsError.js";
 import { Email } from "../valueObjects/Email.js";
 import { TelegramChatId } from "../valueObjects/TelegramChatId.js";
@@ -23,6 +25,8 @@ export class User {
   constructor(props: UserProps, id?: string) {
     if (!props.name?.trim()) throw new EmptyNameError();
     if (!props.email.valueOf.trim()) throw new EmptyEmailError();
+    if (!props.deliveryTime) throw new EmptyDeliveryTimeError();
+    if (!props.timezone?.trim()) throw new EmptyTimezoneError();
     if (!props.topics || props.topics.length === 0)
       throw new EmptyTopicsError();
 
