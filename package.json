@@ -31,6 +31,7 @@
     "bullmq": "^5.66.2",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
+    "express-handlebars": "^8.0.4",
     "install": "^0.13.0",
     "ioredis": "^5.8.2",
     "node-cron": "^4.2.1",
