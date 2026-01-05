@@ -1,0 +1,75 @@
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 32px 28px;
+  background-color: #fefefe;
+  border-radius: 6px;
+  width: 324px;
+  box-shadow: 4px 4px 10px #005c53;
+
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
+}
+
+.input-group {
+  position: relative;
+  margin: 20px 0;
+}
+
+.input-group label {
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: black;
+  padding: 0 5px;
+  pointer-events: none;
+  transition: 0.5s;
+}
+
+.input-group input {
+  width: 320px;
+  height: 40px;
+  font-size: 14px;
+  color: black;
+
+  background: transparent;
+  border: 1.2px solid #000000;
+  outline: none;
+  border-radius: 5px;
+}
+
+.input-group input:focus ~ label,
+.input-group input:valid ~ label {
+  top: 0;
+  font-size: 12px;
+  background: #fefefe;
+}
+
+form > button {
+  background-color: #005c53;
+  color: #fefefe;
+  padding: 12px;
+  border-radius: 5px;
+  border: none;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.4s ease;
+}
+
+form > button:hover {
+  background-color: #007a6f;
+}
+
+@media screen and (max-width: 420px) {
+  form {
+    width: 80%;
+    padding: 24px 16px;
+  }
+}
