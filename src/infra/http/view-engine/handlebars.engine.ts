@@ -1,5 +1,6 @@
 import exphbs from "express-handlebars";
 import { Express } from "express";
+import express from "express";
 export default function setupHandlebarsEngine(app: Express) {
   app.engine(
     "handlebars",
@@ -12,4 +13,5 @@ export default function setupHandlebarsEngine(app: Express) {
   );
   app.set("view engine", "handlebars");
   app.set("views", "src/infra/views/");
+  app.use(express.static("src/infra/public"));
 }
