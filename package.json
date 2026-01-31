@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc",
     "start:dev": "npm run build && node dist/src/infra/http/server.js",
+    "worker": "npm run build && node dist/src/infra/workers/BullMQWorker.js",
     "test": "npm run build && node --test dist/test/**/*.test.js",
     "test:coverage": "npm run build && node --test --experimental-test-coverage dist/test/**/*.test.js",
     "test:debug": "npm run build && node --inspect --test --experimental-test-coverage --watch dist/test/**/*.test.js"
