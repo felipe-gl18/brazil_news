@@ -11,7 +11,7 @@ export class CreateUser {
     private readonly userRepository: IUserRepository,
     private readonly cryptoService: ICryptoService,
     private readonly dateService: IDateService,
-    private readonly calculateNextDeliveryAt: CalculateNextDeliveryAt
+    private readonly calculateNextDeliveryAt: CalculateNextDeliveryAt,
   ) {}
   async execute(data: CreateUserDTO) {
     const email = new Email(data.email);
@@ -24,7 +24,11 @@ export class CreateUser {
       ? this.cryptoService.encrypt(telegramChatId.valueOf)
       : undefined;
 
-    const deliveryTime = this.dateService.parseTimeString(data.deliveryTime);
+    const deliveryTime = this.dateService.parseTimeString(
+      data.deliveryTime,
+      data.timezone,
+    );
+
     const user = new User({
       name: data.name,
       email,
@@ -35,7 +39,7 @@ export class CreateUser {
       nextDeliveryAt: this.calculateNextDeliveryAt.execute(
         this.dateService.now(),
         deliveryTime,
-        data.timezone
+        data.timezone,
       ),
     });
 
