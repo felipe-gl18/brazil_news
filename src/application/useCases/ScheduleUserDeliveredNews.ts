@@ -10,12 +10,12 @@ export class ScheduleUserDeliveredNews {
     private readonly scheduler: IScheduler,
     private readonly queueService: IQueueService,
     private readonly dateService: IDateService,
-    private readonly calculateNextDeliveryAt: CalculateNextDeliveryAt
+    private readonly calculateNextDeliveryAt: CalculateNextDeliveryAt,
   ) {}
   async execute(): Promise<void> {
     this.scheduler.schedule("*/1 * * * *", async () => {
       const users = await this.userRepository.findUsersToNotify(
-        this.dateService.now()
+        this.dateService.now(),
       );
       if (!users) return;
       for (const user of users) {
@@ -23,7 +23,7 @@ export class ScheduleUserDeliveredNews {
         const nextDeliveryAt = this.calculateNextDeliveryAt.execute(
           this.dateService.now(),
           user.deliveryTime,
-          user.timezone
+          user.timezone,
         );
         user.setNextDeliveryAt(nextDeliveryAt);
         await this.userRepository.save(user);
