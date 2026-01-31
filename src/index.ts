@@ -25,7 +25,7 @@ const prismaClient = new PrismaClient({ adapter });
 const nodeCryptoService = new NodeCryptoService();
 const userRepository = new UserRepositoryPrisma(
   prismaClient,
-  nodeCryptoService
+  nodeCryptoService,
 );
 const deliveredNewsRepository = new DeliveredNewsRepositoryPrisma(prismaClient);
 const rSSFetchNewsService = new RSSFetchNewsService();
@@ -38,18 +38,18 @@ const createUser = new CreateUser(
   userRepository,
   nodeCryptoService,
   systemDateService,
-  calculateNextDeliveryAt
+  calculateNextDeliveryAt,
 );
 const findUser = new FindUser(userRepository);
-const updateUser = new UpdateUser(userRepository);
+const updateUser = new UpdateUser(userRepository, systemDateService);
 const sendRSSNewsToUser = new SendRSSNewsToUser(
   userRepository,
   deliveredNewsRepository,
   rSSFetchNewsService,
-  emailNotificationService
+  emailNotificationService,
 );
 const findUserDeliveredNews = new FindUserDeliveredNews(
-  deliveredNewsRepository
+  deliveredNewsRepository,
 );
 const findDeliveredNews = new FindDeliveredNews(deliveredNewsRepository);
 const deleteUser = new DeleteUser(userRepository);
@@ -58,7 +58,7 @@ const scheduleUserDeliveredNews = new ScheduleUserDeliveredNews(
   nodeCronSchedulerService,
   bullMQQueueService,
   systemDateService,
-  calculateNextDeliveryAt
+  calculateNextDeliveryAt,
 );
 // create user
 // find user
