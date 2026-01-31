@@ -15,7 +15,7 @@ const prismaClient = new PrismaClient({ adapter });
 const nodeCryptoService = new NodeCryptoService();
 const userRepository = new UserRepositoryPrisma(
   prismaClient,
-  nodeCryptoService
+  nodeCryptoService,
 );
 const deliveredNewsRepository = new DeliveredNewsRepositoryPrisma(prismaClient);
 const rSSFetchNewsService = new RSSFetchNewsService();
@@ -24,14 +24,18 @@ const sendRSSNewsToUser = new SendRSSNewsToUser(
   userRepository,
   deliveredNewsRepository,
   rSSFetchNewsService,
-  emailNotificationService
+  emailNotificationService,
 );
 const worker = new Worker(
   "notifications",
   async (job) => {
+    console.log("Processing job:", job.id, job.name);
     if (job.name !== "notify-user") return;
     await sendRSSNewsToUser.execute(job.data.userId);
-    console.log("User notified");
   },
-  { connection, concurrency: 5 }
+  { connection, concurrency: 5 },
 );
+
+worker.on("error", (err) => {
+  console.error("Worker error:", err);
+});
