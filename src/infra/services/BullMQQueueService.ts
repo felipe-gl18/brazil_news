@@ -18,7 +18,7 @@ export class BullMQQueueService implements IQueueService {
         },
         {
           jobId: `notify-user-${userId}`,
-        }
+        },
       );
     } catch (error) {
       throw error;
