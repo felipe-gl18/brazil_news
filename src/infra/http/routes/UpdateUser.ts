@@ -5,6 +5,7 @@ import { UserRepositoryPrisma } from "../../prisma/UserRepositoryPrisma.js";
 import { PrismaClient } from "../../../../generated/prisma/client.js";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { NodeCryptoService } from "../../services/NodeCryptoService.js";
+import { SystemDateService } from "../../services/SystemDateService.js";
 
 const route = Router();
 const adapter = new PrismaPg({
@@ -14,13 +15,14 @@ const prismaClient = new PrismaClient({ adapter });
 const nodeCryptoService = new NodeCryptoService();
 const userRepositoryPrisma = new UserRepositoryPrisma(
   prismaClient,
-  nodeCryptoService
+  nodeCryptoService,
 );
-const updateUser = new UpdateUser(userRepositoryPrisma);
+const systemDateService = new SystemDateService();
+const updateUser = new UpdateUser(userRepositoryPrisma, systemDateService);
 const updateUserController = new UpdateUserController(updateUser);
 
 route.put("/:id", async (req, res, next) =>
-  updateUserController.handle(req, res, next)
+  updateUserController.handle(req, res, next),
 );
 
 export { route as updateUserRoute };
