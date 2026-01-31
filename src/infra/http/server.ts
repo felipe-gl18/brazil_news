@@ -4,6 +4,7 @@ import { registerUserRoute } from "./routes/registerUser.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import { updateUserRoute } from "./routes/UpdateUser.js";
 import setupHandlebarsEngine from "./view-engine/handlebars.engine.js";
+import "../../index.js";
 
 export const app = express();
 
