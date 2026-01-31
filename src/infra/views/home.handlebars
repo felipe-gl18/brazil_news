@@ -1,20 +1,89 @@
-<link rel="stylesheet" href="/css/home.css">
+<link rel="stylesheet" href="/css/home.css" />
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+/>
 <form method="post" action="/register">
-    <div class="input-group">
-        <input type="text" id="name" name="name" required />
-        <label for="name">Name</label>
+  <div class="input-group">
+    <input
+      type="text"
+      id="name"
+      name="name"
+      value="{{values.name}}"
+      required
+      maxlength="32"
+    />
+    <label for="name">Name</label>
+  </div>
+  {{#if errors.name}}
+    <p class="error">{{errors.name}}</p>
+  {{/if}}
+  <div class="input-group">
+    <input
+      type="email"
+      id="email"
+      name="email"
+      value="{{values.email}}"
+      required
+    />
+    <label for="email">Email</label>
+  </div>
+  {{#if errors.email}}
+    <p class="error">{{errors.email}}</p>
+  {{/if}}
+  <div class="input-group">
+    <input
+      type="time"
+      id="deliveryTime"
+      name="deliveryTime"
+      step="60"
+      value="{{values.deliveryTime}}"
+      required
+    />
+    <label for="deliveryTime">Delivery Time (HH:MM)</label>
+  </div>
+  {{#if errors.deliveryTime}}
+    <p class="error">{{errors.deliveryTime}}</p>
+  {{/if}}
+  <div class="input-group">
+    <select
+      id="timezone"
+      name="timezone"
+      value="{{values.timezone}}"
+      required
+    ></select>
+    <label for="timezone">Timezone</label>
+  </div>
+  {{#if errors.timezone}}
+    <p class="error">{{errors.timezone}}</p>
+  {{/if}}
+  <div class="dropdown">
+    <button type="button">Selecionar tópicos
+      <i class="fa-solid fa-chevron-down arrow"></i>
+    </button>
+    <div class="dropdown-content">
+      <label>
+        <input type="checkbox" name="topics[]" value="technology" />
+        technology
+      </label>
+      <label>
+        <input type="checkbox" name="topics[]" value="business" />
+        business
+      </label>
+      <label>
+        <input type="checkbox" name="topics[]" value="health" />
+        health
+      </label>
+      <label>
+        <input type="checkbox" name="topics[]" value="world" />
+        world
+      </label>
     </div>
-    <div class="input-group">
-        <input type="email" id="email" name="email" required />
-        <label for="email">Email</label>
-    </div>
-    <div class="input-group">
-        <input type="text" id="deliveryTime" name="deliveryTime" required />
-        <label for="deliveryTime">Delivery Time</label>
-    </div>
-    <div class="input-group">
-        <input type="text" id="timezone" name="timezone" required />
-        <label for="timezone">Timezone</label> 
-    </div>
-    <button type="submit">Submit</button>
+  </div>
+  {{#if errors.topics}}
+    <p class="error">{{errors.topics}}</p>
+  {{/if}}
+  <div class="select-topics"></div>
+  <button type="submit">Submit</button>
 </form>
+<script src="/js/home.js"></script>
