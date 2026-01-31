@@ -12,7 +12,7 @@ import { UserMapper } from "../mappers/UserMapper.js";
 export class UserRepositoryPrisma implements IUserRepository {
   constructor(
     private readonly prismaClient: PrismaClient,
-    private readonly cryptoService: ICryptoService
+    private readonly cryptoService: ICryptoService,
   ) {}
   async create(user: User, encrypted?: EncrytedPayload): Promise<void> {
     try {
