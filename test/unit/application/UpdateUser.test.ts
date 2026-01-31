@@ -5,12 +5,13 @@ import { UserNotFoundError } from "../../../src/application/erros/UserNotFoundEr
 import { Email } from "../../../src/domain/valueObjects/Email.js";
 import { User } from "../../../src/domain/entities/User.js";
 import { userRepository } from "../../mocked_repositories/user_repository.js";
+import { systemDateService } from "../../mocked_services/systemDateService.js";
 describe("UpdatedUserTopics use case", () => {
   it("should not allow update user if user doesnt exist", async () => {
     mock.method(userRepository, "save", () => {
       throw new UserNotFoundError();
     });
-    const updateUserTopics = new UpdateUser(userRepository);
+    const updateUserTopics = new UpdateUser(userRepository, systemDateService);
     await assert.rejects(
       updateUserTopics.execute("id", {
         name: "John Doe",
@@ -19,7 +20,7 @@ describe("UpdatedUserTopics use case", () => {
         timezone: "south-america",
         topics: ["technology"],
       }),
-      UserNotFoundError
+      UserNotFoundError,
     );
   });
   it("should allow update user topics if user exist", async () => {
@@ -32,13 +33,13 @@ describe("UpdatedUserTopics use case", () => {
           timezone: "south-america",
           topics: ["technology"],
           nextDeliveryAt: new Date(),
-        })
+        }),
       );
     });
     const updateMock = mock.method(userRepository, "save", () => {
       return Promise.resolve();
     });
-    const updateUser = new UpdateUser(userRepository);
+    const updateUser = new UpdateUser(userRepository, systemDateService);
     await assert.doesNotReject(
       updateUser.execute("id", {
         name: "John Doe",
@@ -46,7 +47,7 @@ describe("UpdatedUserTopics use case", () => {
         deliveryTime: new Date().toISOString(),
         timezone: "south-africa",
         topics: ["technology", "health"],
-      })
+      }),
     );
     assert.equal(updateMock.mock.calls.length, 1);
     const [result] = updateMock.mock.calls[0].arguments;

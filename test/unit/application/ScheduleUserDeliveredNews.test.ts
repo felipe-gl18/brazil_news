@@ -22,13 +22,13 @@ describe("ScheduleUserDeliveredNews use case", () => {
     const scheduleMock = mock.method(
       nodeCronSchedulerService,
       "schedule",
-      () => {}
+      () => {},
     );
     const sendRSSNewsToUser = new SendRSSNewsToUser(
       userRepository,
       deliveredNewsRepository,
       fetchNewsService,
-      emailNotificationService
+      emailNotificationService,
     );
     const calculateNextDeliveryAt = new CalculateNextDeliveryAt();
     const scheduleUserDeliveredNews = new ScheduleUserDeliveredNews(
@@ -36,7 +36,7 @@ describe("ScheduleUserDeliveredNews use case", () => {
       nodeCronSchedulerService,
       bullmqQueueService,
       systemDateService,
-      calculateNextDeliveryAt
+      calculateNextDeliveryAt,
     );
     await assert.doesNotReject(scheduleUserDeliveredNews.execute());
     const [expression, _] = scheduleMock.mock.calls[0].arguments;

@@ -18,7 +18,7 @@ describe("User Entity", () => {
           timezone: "south-america",
           nextDeliveryAt: new Date(),
         }),
-      { message: "Name cannot be empty" }
+      { message: "Name cannot be empty" },
     );
   });
   it("should not allow empty topics", () => {
@@ -36,7 +36,7 @@ describe("User Entity", () => {
         }),
       {
         message: "Topics cannot be empty",
-      }
+      },
     );
   });
   it("should not allow setting ID once", () => {
@@ -55,7 +55,7 @@ describe("User Entity", () => {
         user.setId("123");
         user.setId("456");
       },
-      { message: "ID has already been set" }
+      { message: "ID has already been set" },
     );
   });
 

@@ -25,7 +25,7 @@ describe("NewsFilterService Domain Tests", () => {
         timezone: "south-america",
         nextDeliveryAt: new Date(),
       }),
-      news
+      news,
     );
     assert.equal(result, true);
   });
@@ -49,7 +49,7 @@ describe("NewsFilterService Domain Tests", () => {
         timezone: "south-america",
         nextDeliveryAt: new Date(),
       }),
-      news
+      news,
     );
     assert.equal(result, false);
   });

@@ -23,7 +23,7 @@ describe("CreateUser use case", () => {
       userRepository,
       cryptoService,
       systemDateService,
-      calculateNextDeliveryAt
+      calculateNextDeliveryAt,
     );
     await assert.rejects(createUser.execute(user), EmailAlreadyInUseError);
   });
@@ -38,7 +38,7 @@ describe("CreateUser use case", () => {
       userRepository,
       cryptoService,
       systemDateService,
-      calculateNextDeliveryAt
+      calculateNextDeliveryAt,
     );
     await assert.doesNotReject(createUser.execute(user));
     assert.equal(createMock.mock.calls.length, 1);
@@ -46,7 +46,7 @@ describe("CreateUser use case", () => {
     assert.equal(createdUser?.name, user.name);
     assert.equal(createdUser?.email.valueOf, user.email);
     assert.equal(createdUser?.timezone, user.timezone);
-    assert.equal(createdUser?.deliveryTime.toISOString(), user.deliveryTime);
+    assert.equal(createdUser?.deliveryTime, user.deliveryTime);
     assert.deepEqual(createdUser.topics, user.topics);
   });
 });
