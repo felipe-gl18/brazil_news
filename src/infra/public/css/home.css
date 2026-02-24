@@ -181,6 +181,13 @@ form > button:hover {
   cursor: pointer;
 }
 
+.error {
+  color: #ff4d4f;
+  font-size: 0.875rem;
+  margin-top: -8px;
+  margin-bottom: 12px;
+}
+
 @media screen and (max-width: 420px) {
   form {
     width: 80%;
