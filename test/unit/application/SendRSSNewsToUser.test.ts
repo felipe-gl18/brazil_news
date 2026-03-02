@@ -9,8 +9,16 @@ import { deliveredNewsRepository } from "../../mocked_repositories/deliveredNews
 import { fetchNewsService } from "../../mocked_services/fetchNewsService.js";
 import { emailNotificationService } from "../../mocked_services/emailNotificationService.js";
 import { telegramNotificationService } from "../../mocked_services/telegramNotificationService.js";
+import { SendUpdateAccountLink } from "../../../src/application/useCases/SendUpdateAccountLink.js";
+import { tokenRepository } from "../../mocked_repositories/token_repository.js";
+import { cryptoService } from "../../mocked_services/cryptoService.js";
 
 describe("SendRSSNewsToUser use case", () => {
+  const sendUpdateAccountLink = new SendUpdateAccountLink(
+    userRepository,
+    tokenRepository,
+    cryptoService,
+  );
   it("should not allow to send RSS news to user if it doesn't exist", async () => {
     mock.method(userRepository, "findById", () => {
       throw new UserNotFoundError();
@@ -19,7 +27,8 @@ describe("SendRSSNewsToUser use case", () => {
       userRepository,
       deliveredNewsRepository,
       fetchNewsService,
-      emailNotificationService
+      emailNotificationService,
+      sendUpdateAccountLink,
     );
     await assert.rejects(sendRSSNewsToUser.execute("id"), UserNotFoundError);
   });
@@ -45,23 +54,24 @@ describe("SendRSSNewsToUser use case", () => {
     const saveManyMock = mock.method(
       deliveredNewsRepository,
       "saveMany",
-      () => {}
+      () => {},
     );
     const sendNewsEmailMock = mock.method(
       emailNotificationService,
       "notify",
-      () => {}
+      () => {},
     );
     const sendNewsTelegramMock = mock.method(
       telegramNotificationService,
       "notify",
-      () => {}
+      () => {},
     );
     const sendRSSNewsToUserEmail = new SendRSSNewsToUser(
       userRepository,
       deliveredNewsRepository,
       fetchNewsService,
-      emailNotificationService
+      emailNotificationService,
+      sendUpdateAccountLink,
     );
     await assert.doesNotReject(sendRSSNewsToUserEmail.execute("id"));
     assert.deepEqual(sendNewsEmailMock.mock.calls[0].arguments[0]?.recipient, {
@@ -72,7 +82,8 @@ describe("SendRSSNewsToUser use case", () => {
       userRepository,
       deliveredNewsRepository,
       fetchNewsService,
-      telegramNotificationService
+      telegramNotificationService,
+      sendUpdateAccountLink,
     );
     await assert.doesNotReject(sendRSSNewsToUserTelegram.execute("id"));
     assert.deepEqual(
@@ -80,7 +91,7 @@ describe("SendRSSNewsToUser use case", () => {
       {
         email: "johndoe@gmail.com",
         telegramChatId: "5588992048450",
-      }
+      },
     );
   });
 });

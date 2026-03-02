@@ -14,7 +14,15 @@ import { bullmqQueueService } from "../../mocked_services/bullmqQueueService.js"
 import { fetchNewsService } from "../../mocked_services/fetchNewsService.js";
 import { emailNotificationService } from "../../mocked_services/emailNotificationService.js";
 import { systemDateService } from "../../mocked_services/systemDateService.js";
+import { SendUpdateAccountLink } from "../../../src/application/useCases/SendUpdateAccountLink.js";
+import { cryptoService } from "../../mocked_services/cryptoService.js";
+import { tokenRepository } from "../../mocked_repositories/token_repository.js";
 describe("ScheduleUserDeliveredNews use case", () => {
+  const sendUpdateAccountLink = new SendUpdateAccountLink(
+    userRepository,
+    tokenRepository,
+    cryptoService,
+  );
   it("should allow scheduling user delivered news", async () => {
     mock.method(userRepository, "findAll", () => {
       return Promise.resolve([new User(user, "id")]);
@@ -29,6 +37,7 @@ describe("ScheduleUserDeliveredNews use case", () => {
       deliveredNewsRepository,
       fetchNewsService,
       emailNotificationService,
+      sendUpdateAccountLink,
     );
     const calculateNextDeliveryAt = new CalculateNextDeliveryAt();
     const scheduleUserDeliveredNews = new ScheduleUserDeliveredNews(
