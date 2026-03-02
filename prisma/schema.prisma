@@ -27,6 +27,7 @@ model User {
   nextDeliveryAt         DateTime
   createdAt              DateTime        @default(now())
   updatedAt              DateTime        @updatedAt
+  tokens                 Token[]
 }
 
 model DeliveredNews {
@@ -38,4 +39,13 @@ model DeliveredNews {
   sentAt DateTime @default(now())
 
   @@unique([userId, link])
+}
+
+model Token {
+  userId    String   @id
+  token     String   @unique
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, token])
 }
