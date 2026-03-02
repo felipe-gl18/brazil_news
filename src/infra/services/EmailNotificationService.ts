@@ -21,7 +21,10 @@ export class EmailNotificationService implements INotificationService {
   }
   async notify(payload: NotificationPayloadDTO): Promise<void> {
     try {
-      const html = this.buildNewsHtml(payload.news);
+      const html = this.buildHtml(
+        payload.news,
+        payload.recipient.updateAccountLink,
+      );
       await this.transporter.sendMail({
         from: `"Brazil News" <${process.env.BRAZIL_NEWS_EMAIL}>`,
         to: payload.recipient.email,
@@ -32,7 +35,10 @@ export class EmailNotificationService implements INotificationService {
       throw new Error("Failed to send email noticiation", { cause: error });
     }
   }
-  private buildNewsHtml(news: NotificationNewsDTO[]): string {
+  private buildHtml(
+    news: NotificationNewsDTO[],
+    updateAccountLink: string,
+  ): string {
     return `
       <h2>Brazil News</h2>
       <ul>
@@ -47,10 +53,11 @@ export class EmailNotificationService implements INotificationService {
               <small>${item.publishedAt.toDateString()}</small>
               <p>${item.content}</p>
             </li>
-          `
+          `,
           )
           .join("")}
       </ul>
+      <a href="${updateAccountLink}">Update your account preferences</a>
     `;
   }
 }
