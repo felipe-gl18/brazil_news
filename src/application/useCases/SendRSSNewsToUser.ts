@@ -5,28 +5,32 @@ import { NewsFilterService } from "../../domain/services/NewsFilterService.js";
 import { RSSNewsMapper } from "../mappers/RSSNewsMapper.js";
 import { IFetchNewsService } from "../services/IFetchNewsService";
 import { INotificationService } from "../services/INotificationService";
+import { SendUpdateAccountLink } from "./SendUpdateAccountLink.js";
 export class SendRSSNewsToUser {
   constructor(
     private readonly userRepository: IUserRepository,
     private readonly deliveredNewsRepository: IDeliveredNewsRepository,
     private readonly fetchNewsService: IFetchNewsService,
-    private readonly notificationService: INotificationService
+    private readonly notificationService: INotificationService,
+    private readonly sendUpdateAccountLink: SendUpdateAccountLink,
   ) {}
   async execute(userId: string) {
     const foundUser = await this.userRepository.findById(userId);
     const fetchedNewsDTOs = await this.fetchNewsService.fetchLatestNews(
-      foundUser!.topics
+      foundUser!.topics,
     );
     const newsEntities = fetchedNewsDTOs.map((item) => new News(item));
     const releventNews = newsEntities.filter((news) =>
-      NewsFilterService.matchUserInterests(foundUser!, news)
+      NewsFilterService.matchUserInterests(foundUser!, news),
     );
     const deliveredNews = releventNews.map((news) =>
-      RSSNewsMapper.toDeliveredNews(news, userId)
+      RSSNewsMapper.toDeliveredNews(news, userId),
     );
+    const updateAccountLink = await this.sendUpdateAccountLink.execute(userId);
     const recipient = {
       email: foundUser!.email.valueOf,
       telegramChatId: foundUser!.telegramChatId?.valueOf,
+      updateAccountLink,
     };
     await this.notificationService.notify({
       news: releventNews,
