@@ -11,6 +11,9 @@ const cryptoService: ICryptoService = {
   decrypt() {
     return "";
   },
+  generateRandomToken() {
+    return "random-token";
+  },
 };
 
 export { cryptoService };
