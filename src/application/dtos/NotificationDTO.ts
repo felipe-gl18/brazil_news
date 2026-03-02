@@ -1,6 +1,7 @@
 export interface NotificationRecipientDTO {
   email?: string;
   telegramChatId?: string;
+  updateAccountLink: string;
 }
 
 export interface NotificationNewsDTO {
