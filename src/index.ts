@@ -18,6 +18,8 @@ import { NodeCronSchedulerService } from "./infra/services/NodeCronSchedulerServ
 import { BullMQQueueService } from "./infra/services/BullMQQueueService.js";
 import { CalculateNextDeliveryAt } from "./application/useCases/CalculateNextDeliveryAt.js";
 import { SystemDateService } from "./infra/services/SystemDateService.js";
+import { SendUpdateAccountLink } from "./application/useCases/SendUpdateAccountLink.js";
+import { TokenRepositoryPrisma } from "./infra/prisma/TokenRepositoryPrisma.js";
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL!,
 });
@@ -28,6 +30,7 @@ const userRepository = new UserRepositoryPrisma(
   nodeCryptoService,
 );
 const deliveredNewsRepository = new DeliveredNewsRepositoryPrisma(prismaClient);
+const tokenRepository = new TokenRepositoryPrisma(prismaClient);
 const rSSFetchNewsService = new RSSFetchNewsService();
 const emailNotificationService = new EmailNotificationService();
 const nodeCronSchedulerService = new NodeCronSchedulerService();
@@ -42,11 +45,17 @@ const createUser = new CreateUser(
 );
 const findUser = new FindUser(userRepository);
 const updateUser = new UpdateUser(userRepository, systemDateService);
+const sendUpdateAccountLink = new SendUpdateAccountLink(
+  userRepository,
+  tokenRepository,
+  nodeCryptoService,
+);
 const sendRSSNewsToUser = new SendRSSNewsToUser(
   userRepository,
   deliveredNewsRepository,
   rSSFetchNewsService,
   emailNotificationService,
+  sendUpdateAccountLink,
 );
 const findUserDeliveredNews = new FindUserDeliveredNews(
   deliveredNewsRepository,
