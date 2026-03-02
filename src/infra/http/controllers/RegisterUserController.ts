@@ -7,9 +7,7 @@ export class RegisterUserController {
   async handle(req: Request, res: Response, next: NextFunction) {
     try {
       await this.createUser.execute(req.body);
-      return res
-        .status(201)
-        .send({ success: true, message: "User registered successfully" });
+      return res.status(201).render("registered", { values: req.body });
     } catch (error) {
       if (error instanceof DomainError || error instanceof ApplicationError)
         return res.status(400).render("home", {
