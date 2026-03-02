@@ -29,7 +29,7 @@ export class NodeCryptoService implements ICryptoService {
     const decipher = crypto.createDecipheriv(
       this.algorithm,
       this.key,
-      Buffer.from(payload.iv, "hex")
+      Buffer.from(payload.iv, "hex"),
     );
     decipher.setAuthTag(Buffer.from(payload.authTag, "hex"));
     const decrypted = Buffer.concat([
@@ -37,5 +37,8 @@ export class NodeCryptoService implements ICryptoService {
       decipher.final(),
     ]);
     return decrypted.toString("utf-8");
+  }
+  generateRandomToken(): string {
+    return crypto.randomBytes(32).toString("hex");
   }
 }
