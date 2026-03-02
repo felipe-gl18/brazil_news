@@ -7,6 +7,8 @@ import { EmailNotificationService } from "../services/EmailNotificationService.j
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../../../generated/prisma/client.js";
 import { NodeCryptoService } from "../services/NodeCryptoService.js";
+import { TokenRepositoryPrisma } from "../prisma/TokenRepositoryPrisma.js";
+import { SendUpdateAccountLink } from "../../application/useCases/SendUpdateAccountLink.js";
 const connection = { host: "127.0.0.1", port: 6379 };
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL!,
@@ -18,13 +20,20 @@ const userRepository = new UserRepositoryPrisma(
   nodeCryptoService,
 );
 const deliveredNewsRepository = new DeliveredNewsRepositoryPrisma(prismaClient);
+const tokenRepository = new TokenRepositoryPrisma(prismaClient);
 const rSSFetchNewsService = new RSSFetchNewsService();
 const emailNotificationService = new EmailNotificationService();
+const sendUpdateAccountLink = new SendUpdateAccountLink(
+  userRepository,
+  tokenRepository,
+  nodeCryptoService,
+);
 const sendRSSNewsToUser = new SendRSSNewsToUser(
   userRepository,
   deliveredNewsRepository,
   rSSFetchNewsService,
   emailNotificationService,
+  sendUpdateAccountLink,
 );
 const worker = new Worker(
   "notifications",
