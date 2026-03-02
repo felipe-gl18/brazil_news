@@ -1,0 +1,30 @@
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  color: #e0e0e0;
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
+}
+
+main > h1 {
+  font-size: 2.5rem;
+}
+
+main > p {
+  font-size: 1.25rem;
+  margin-top: 16px;
+}
+
+main > span {
+  font-size: 0.875rem;
+  margin-top: 12px;
+  color: #a0a0a0;
+  width: 520px;
+}
