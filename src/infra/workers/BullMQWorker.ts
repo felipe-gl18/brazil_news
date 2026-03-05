@@ -24,7 +24,6 @@ const tokenRepository = new TokenRepositoryPrisma(prismaClient);
 const rSSFetchNewsService = new RSSFetchNewsService();
 const emailNotificationService = new EmailNotificationService();
 const sendUpdateAccountLink = new SendUpdateAccountLink(
-  userRepository,
   tokenRepository,
   nodeCryptoService,
 );
@@ -38,7 +37,6 @@ const sendRSSNewsToUser = new SendRSSNewsToUser(
 const worker = new Worker(
   "notifications",
   async (job) => {
-    console.log("Processing job:", job.id, job.name);
     if (job.name !== "notify-user") return;
     await sendRSSNewsToUser.execute(job.data.userId);
   },
