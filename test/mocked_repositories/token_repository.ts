@@ -11,15 +11,9 @@ const user = {
 };
 const tokenRepository: ITokenRepository = {
   async save(token, userId, expiresAt) {},
-  async deleteByToken(token) {},
+  async deleteToken(userId) {},
   async findByToken(token) {
-    return {
-      name: user.name,
-      email: user.email.valueOf,
-      deliveryTime: user.deliveryTime,
-      timezone: user.timezone,
-      topics: user.topics,
-    };
+    return new User(user);
   },
 };
 
