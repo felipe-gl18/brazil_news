@@ -4,6 +4,7 @@ import { PrismaClient } from "../../../../generated/prisma/client.js";
 import { UpdateAccountViewController } from "../controllers/updateAccountViewcontroller.js";
 import { FindUserByToken } from "../../../application/useCases/FindUserByToken.js";
 import { TokenRepositoryPrisma } from "../../prisma/TokenRepositoryPrisma.js";
+import { SystemDateService } from "../../services/SystemDateService.js";
 const route = Router();
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL!,
@@ -11,7 +12,11 @@ const adapter = new PrismaPg({
 const prismaClient = new PrismaClient({ adapter });
 const tokenRepositoryPrisma = new TokenRepositoryPrisma(prismaClient);
 const findUserByToken = new FindUserByToken(tokenRepositoryPrisma);
-const updateAccountView = new UpdateAccountViewController(findUserByToken);
+const systemDateService = new SystemDateService();
+const updateAccountView = new UpdateAccountViewController(
+  findUserByToken,
+  systemDateService,
+);
 route.get("", async (req, res, next) =>
   updateAccountView.handle(req, res, next),
 );
