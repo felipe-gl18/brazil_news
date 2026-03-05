@@ -5,6 +5,7 @@ import { errorHandler } from "./middlewares/errorHandler.js";
 import { updateUserRoute } from "./routes/updateUser.js";
 import setupHandlebarsEngine from "./view-engine/handlebars.engine.js";
 import "../../index.js";
+import "../views/helpers/helper.js";
 import { updateAccountViewRoute } from "./routes/updateAccountView.js";
 
 export const app = express();
@@ -20,9 +21,6 @@ app.use("/update-account", updateAccountViewRoute);
 
 app.get("/", (req, res) => {
   res.render("home");
-});
-app.get("/update-account", (req, res) => {
-  res.render("update");
 });
 
 app.use(errorHandler);
