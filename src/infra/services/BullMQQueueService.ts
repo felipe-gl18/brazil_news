@@ -10,6 +10,9 @@ export class BullMQQueueService implements IQueueService {
   }
   async addJob(userId: string): Promise<void> {
     try {
+      const existingJob = await this.queue.getJob(`notify-user-${userId}`);
+      if (existingJob) await existingJob.remove();
+
       await this.queue.add(
         "notify-user",
         {
