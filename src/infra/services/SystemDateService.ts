@@ -11,4 +11,11 @@ export class SystemDateService implements IDateService {
     date.setHours(hours, minutes, 0, 0);
     return date;
   }
+
+  parseDateToString(date: Date, timezone: string): string {
+    const tzDate = new TZDate(date, timezone);
+    const hours = tzDate.getHours().toString().padStart(2, "0");
+    const minutes = tzDate.getMinutes().toString().padStart(2, "0");
+    return `${hours}:${minutes}`;
+  }
 }
