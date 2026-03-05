@@ -19,7 +19,6 @@ import { cryptoService } from "../../mocked_services/cryptoService.js";
 import { tokenRepository } from "../../mocked_repositories/token_repository.js";
 describe("ScheduleUserDeliveredNews use case", () => {
   const sendUpdateAccountLink = new SendUpdateAccountLink(
-    userRepository,
     tokenRepository,
     cryptoService,
   );

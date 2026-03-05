@@ -15,7 +15,6 @@ import { cryptoService } from "../../mocked_services/cryptoService.js";
 
 describe("SendRSSNewsToUser use case", () => {
   const sendUpdateAccountLink = new SendUpdateAccountLink(
-    userRepository,
     tokenRepository,
     cryptoService,
   );

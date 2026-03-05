@@ -6,12 +6,19 @@ import { Email } from "../../../src/domain/valueObjects/Email.js";
 import { User } from "../../../src/domain/entities/User.js";
 import { userRepository } from "../../mocked_repositories/user_repository.js";
 import { systemDateService } from "../../mocked_services/systemDateService.js";
+import { tokenRepository } from "../../mocked_repositories/token_repository.js";
+import { CalculateNextDeliveryAt } from "../../../src/application/useCases/CalculateNextDeliveryAt.js";
 describe("UpdatedUserTopics use case", () => {
   it("should not allow update user if user doesnt exist", async () => {
     mock.method(userRepository, "save", () => {
       throw new UserNotFoundError();
     });
-    const updateUserTopics = new UpdateUser(userRepository, systemDateService);
+    const updateUserTopics = new UpdateUser(
+      userRepository,
+      tokenRepository,
+      new CalculateNextDeliveryAt(),
+      systemDateService,
+    );
     await assert.rejects(
       updateUserTopics.execute("id", {
         name: "John Doe",
@@ -39,7 +46,12 @@ describe("UpdatedUserTopics use case", () => {
     const updateMock = mock.method(userRepository, "save", () => {
       return Promise.resolve();
     });
-    const updateUser = new UpdateUser(userRepository, systemDateService);
+    const updateUser = new UpdateUser(
+      userRepository,
+      tokenRepository,
+      new CalculateNextDeliveryAt(),
+      systemDateService,
+    );
     await assert.doesNotReject(
       updateUser.execute("id", {
         name: "John Doe",
