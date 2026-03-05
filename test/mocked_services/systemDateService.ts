@@ -7,5 +7,8 @@ const systemDateService: IDateService = {
   parseTimeString(timeString: string): Date {
     return new Date(timeString);
   },
+  parseDateToString(date, timezone) {
+    return "10:10";
+  },
 };
 export { systemDateService };
