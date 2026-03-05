@@ -44,9 +44,13 @@ const createUser = new CreateUser(
   calculateNextDeliveryAt,
 );
 const findUser = new FindUser(userRepository);
-const updateUser = new UpdateUser(userRepository, systemDateService);
-const sendUpdateAccountLink = new SendUpdateAccountLink(
+const updateUser = new UpdateUser(
   userRepository,
+  tokenRepository,
+  calculateNextDeliveryAt,
+  systemDateService,
+);
+const sendUpdateAccountLink = new SendUpdateAccountLink(
   tokenRepository,
   nodeCryptoService,
 );
