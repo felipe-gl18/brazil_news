@@ -6,6 +6,8 @@ import { PrismaClient } from "../../../../generated/prisma/client.js";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { NodeCryptoService } from "../../services/NodeCryptoService.js";
 import { SystemDateService } from "../../services/SystemDateService.js";
+import { TokenRepositoryPrisma } from "../../prisma/TokenRepositoryPrisma.js";
+import { CalculateNextDeliveryAt } from "../../../application/useCases/CalculateNextDeliveryAt.js";
 
 const route = Router();
 const adapter = new PrismaPg({
@@ -17,11 +19,18 @@ const userRepositoryPrisma = new UserRepositoryPrisma(
   prismaClient,
   nodeCryptoService,
 );
+const tokenRepository = new TokenRepositoryPrisma(prismaClient);
 const systemDateService = new SystemDateService();
-const updateUser = new UpdateUser(userRepositoryPrisma, systemDateService);
+const calculateNextDeliveryAt = new CalculateNextDeliveryAt();
+const updateUser = new UpdateUser(
+  userRepositoryPrisma,
+  tokenRepository,
+  calculateNextDeliveryAt,
+  systemDateService,
+);
 const updateUserController = new UpdateUserController(updateUser);
 
-route.put("/:id", async (req, res, next) =>
+route.post("/:token", async (req, res, next) =>
   updateUserController.handle(req, res, next),
 );
 
