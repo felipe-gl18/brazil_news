@@ -1,14 +1,17 @@
 import { PrismaClient, Prisma } from "../../../generated/prisma/client.js";
+import { TokenAlreadyExistError } from "../../application/erros/TokenAlreadyExistError.js";
 import { UserNotFoundError } from "../../application/erros/UserNotFoundError.js";
+import { User } from "../../domain/entities/User.js";
 import { ITokenRepository } from "../../domain/repositories/ITokenRepository";
 import { DatabaseError } from "../errors/DatabaseError.js";
 import { RepositoryError } from "../errors/RepositoryError.js";
+import { UserMapper } from "../mappers/UserMapper.js";
 
 export class TokenRepositoryPrisma implements ITokenRepository {
   constructor(private readonly prismaClient: PrismaClient) {}
   async save(token: string, userId: string, expiresAt: Date): Promise<void> {
     try {
-      this.prismaClient.token.create({
+      await this.prismaClient.token.create({
         data: {
           token,
           userId,
@@ -18,21 +21,15 @@ export class TokenRepositoryPrisma implements ITokenRepository {
     } catch (error: any) {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code === "P2025"
+        error.code === "P2002"
       )
-        throw new UserNotFoundError();
+        throw new TokenAlreadyExistError();
       if (error instanceof Prisma.PrismaClientInitializationError)
         throw new DatabaseError("Failed to save token", error);
       throw new RepositoryError("Failed to save token", error);
     }
   }
-  async findByToken(token: string): Promise<{
-    name: string;
-    email: string;
-    deliveryTime: Date;
-    timezone: string;
-    topics: string[];
-  } | null> {
+  async findByToken(token: string): Promise<User | null> {
     try {
       const tokenData = await this.prismaClient.token.findUnique({
         where: {
@@ -43,20 +40,14 @@ export class TokenRepositoryPrisma implements ITokenRepository {
         },
       });
       if (!tokenData) return null;
-      return {
-        name: tokenData.user.name,
-        email: tokenData.user.email,
-        deliveryTime: tokenData.user.deliveryTime,
-        timezone: tokenData.user.timezone,
-        topics: tokenData.user.topics,
-      };
+      return UserMapper.toDomain(tokenData.user);
     } catch (error: any) {
       if (error instanceof Prisma.PrismaClientInitializationError)
         throw new DatabaseError("Failed to find token", error);
       throw new RepositoryError("Failed to find token", error);
     }
   }
-  async deleteByToken(token: string): Promise<void> {
+  async deleteToken(token: string): Promise<void> {
     try {
       await this.prismaClient.token.delete({
         where: {
