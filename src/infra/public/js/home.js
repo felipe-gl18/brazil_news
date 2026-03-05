@@ -37,7 +37,7 @@ inputTopics.forEach((input) => {
     } else {
       const topicSpans = selectedTopics.querySelectorAll(".topic-item");
       topicSpans.forEach((span) => {
-        if (span.firstChild.textContent === topic) {
+        if (span.firstChild.textContent.trim() === topic) {
           span.remove();
         }
       });
@@ -51,7 +51,7 @@ selectedTopics.addEventListener("click", (e) => {
   const topicSpan = icon.parentElement;
   const topicValue = topicSpan.firstChild.textContent;
   const correspondingInput = document.querySelector(
-    `.dropdown-content input[value="${topicValue}"]`,
+    `.dropdown-content input[value="${topicValue.trim()}"]`,
   );
   if (correspondingInput) correspondingInput.checked = false;
   topicSpan.remove();
