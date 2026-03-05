@@ -3,7 +3,7 @@
   rel="stylesheet"
   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 />
-<form method="post" action="/update">
+<form method="post" action="/update/{{token}}">
   <div class="input-group">
     <input
       type="text"
@@ -63,19 +63,19 @@
     </button>
     <div class="dropdown-content">
       <label>
-        <input type="checkbox" name="topics[]" value="technology" />
+        <input type="checkbox" name="topics[]" value="technology"  {{#if (includes values.topics "technology")}}checked{{/if}} />
         technology
       </label>
       <label>
-        <input type="checkbox" name="topics[]" value="business" />
+        <input type="checkbox" name="topics[]" value="business" {{#if (includes values.topics "business")}}checked{{/if}} />
         business
       </label>
       <label>
-        <input type="checkbox" name="topics[]" value="health" />
+        <input type="checkbox" name="topics[]" value="health" {{#if (includes values.topics "health")}}checked{{/if}} />
         health
       </label>
       <label>
-        <input type="checkbox" name="topics[]" value="world" />
+        <input type="checkbox" name="topics[]" value="world" {{#if (includes values.topics "world")}}checked{{/if}} />
         world
       </label>
     </div>
@@ -83,7 +83,14 @@
   {{#if errors.topics}}
     <p class="error">{{errors.topics}}</p>
   {{/if}}
-  <div class="select-topics"></div>
+  <div class="select-topics">
+    {{#each values.topics}}
+      <span class="topic-item">
+       {{this}}
+       <i class="fa-solid fa-xmark remove-icon"></i>
+      </span>
+    {{/each}}
+  </div>
   <button type="submit">Submit</button>
 </form>
 <script src="/js/home.js"></script>
