@@ -18,7 +18,8 @@ export class RSSFetchNewsService implements IFetchNewsService {
     const results = await Promise.all(
       feeds.map(async (feedUrl) => {
         const { items } = await this.rssParser.parseURL(feedUrl);
-        return items.map(
+        const limitedItems = items.slice(0, 3);
+        return limitedItems.map(
           (item) =>
             new News({
               title: item.title!,
@@ -26,14 +27,13 @@ export class RSSFetchNewsService implements IFetchNewsService {
               link: item.link!,
               publishedAt: new Date(item.pubDate!),
               topic: this.resolveTopic(feedUrl),
-            })
+            }),
         );
-      })
+      }),
     );
     const flattedNews = results.flat();
     // limiting the amount of news to 6
-    const slicedNews = flattedNews.slice(0, 6);
-    return slicedNews;
+    return flattedNews;
   }
   private resolveTopic(feedURL: string): string {
     return (
