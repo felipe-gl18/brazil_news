@@ -6,6 +6,7 @@ import { CalculateNextDeliveryAt } from "../../../src/application/useCases/Calcu
 import { userRepository } from "../../mocked_repositories/user_repository.js";
 import { cryptoService } from "../../mocked_services/cryptoService.js";
 import { systemDateService } from "../../mocked_services/systemDateService.js";
+import { Language } from "../../../src/domain/entities/User.js";
 describe("CreateUser use case", () => {
   const calculateNextDeliveryAt = new CalculateNextDeliveryAt();
   const user = {
@@ -14,6 +15,7 @@ describe("CreateUser use case", () => {
     topics: ["fitness"],
     deliveryTime: "2025-12-21T18:30:00.000Z",
     timezone: "South/America",
+    language: "pt" as Language,
   };
   it("should not allow create user if the email is already beign used", async () => {
     mock.method(userRepository, "create", () => {

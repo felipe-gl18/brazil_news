@@ -1,7 +1,7 @@
 import { describe, it } from "node:test";
 import assert from "assert";
 import { Email } from "../../../src/domain/valueObjects/Email.js";
-import { User } from "../../../src/domain/entities/User.js";
+import { Language, User } from "../../../src/domain/entities/User.js";
 import { News } from "../../../src/domain/entities/News.js";
 import { NewsFilterService } from "../../../src/domain/services/NewsFilterService.js";
 
@@ -24,6 +24,7 @@ describe("NewsFilterService Domain Tests", () => {
         deliveryTime: new Date(),
         timezone: "south-america",
         nextDeliveryAt: new Date(),
+        language: "pt" as Language,
       }),
       news,
     );
@@ -48,6 +49,7 @@ describe("NewsFilterService Domain Tests", () => {
         deliveryTime: new Date(),
         timezone: "south-america",
         nextDeliveryAt: new Date(),
+        language: "pt" as Language,
       }),
       news,
     );

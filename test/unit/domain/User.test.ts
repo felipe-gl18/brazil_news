@@ -1,6 +1,6 @@
 import assert from "assert";
 import { describe, it } from "node:test";
-import { User } from "../../../src/domain/entities/User.js";
+import { Language, User } from "../../../src/domain/entities/User.js";
 import { Email } from "../../../src/domain/valueObjects/Email.js";
 import { DomainError } from "../../../src/domain/erros/DomainError.js";
 
@@ -17,6 +17,7 @@ describe("User Entity", () => {
           deliveryTime: new Date(),
           timezone: "south-america",
           nextDeliveryAt: new Date(),
+          language: "pt" as Language,
         }),
       { message: "Name cannot be empty" },
     );
@@ -33,6 +34,7 @@ describe("User Entity", () => {
           deliveryTime: new Date(),
           timezone: "south-america",
           nextDeliveryAt: new Date(),
+          language: "pt" as Language,
         }),
       {
         message: "Topics cannot be empty",
@@ -51,6 +53,7 @@ describe("User Entity", () => {
           deliveryTime: new Date(),
           timezone: "south-america",
           nextDeliveryAt: new Date(),
+          language: "pt" as Language,
         });
         user.setId("123");
         user.setId("456");
@@ -69,6 +72,7 @@ describe("User Entity", () => {
       deliveryTime: new Date(),
       timezone: "south-america",
       nextDeliveryAt: new Date(),
+      language: "pt" as Language,
     });
     user.setId("123");
     assert.equal(user.id, "123");
@@ -83,6 +87,7 @@ describe("User Entity", () => {
       deliveryTime: new Date(),
       timezone: "south-america",
       nextDeliveryAt: new Date(),
+      language: "pt" as Language,
     });
     user.setTopics(["fitness", "health"]);
   });
@@ -97,6 +102,7 @@ describe("User Entity", () => {
       deliveryTime: new Date(),
       timezone: "south-america",
       nextDeliveryAt: new Date(),
+      language: "pt" as Language,
     });
     assert.equal(user.name, "John Doe");
     assert.equal(user.email.valueOf, "a@b.com");

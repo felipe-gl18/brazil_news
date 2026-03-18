@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { UpdateUser } from "../../../src/application/useCases/UpdateUser.js";
 import { UserNotFoundError } from "../../../src/application/erros/UserNotFoundError.js";
 import { Email } from "../../../src/domain/valueObjects/Email.js";
-import { User } from "../../../src/domain/entities/User.js";
+import { Language, User } from "../../../src/domain/entities/User.js";
 import { userRepository } from "../../mocked_repositories/user_repository.js";
 import { systemDateService } from "../../mocked_services/systemDateService.js";
 import { tokenRepository } from "../../mocked_repositories/token_repository.js";
@@ -40,6 +40,7 @@ describe("UpdatedUserTopics use case", () => {
           timezone: "south-america",
           topics: ["technology"],
           nextDeliveryAt: new Date(),
+          language: "pt" as Language,
         }),
       );
     });

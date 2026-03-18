@@ -12,6 +12,7 @@ import { telegramNotificationService } from "../../mocked_services/telegramNotif
 import { SendUpdateAccountLink } from "../../../src/application/useCases/SendUpdateAccountLink.js";
 import { tokenRepository } from "../../mocked_repositories/token_repository.js";
 import { cryptoService } from "../../mocked_services/cryptoService.js";
+import { libretranslateTranslationService } from "../../mocked_services/libretranslateTranslationService.js";
 
 describe("SendRSSNewsToUser use case", () => {
   const sendUpdateAccountLink = new SendUpdateAccountLink(
@@ -28,6 +29,7 @@ describe("SendRSSNewsToUser use case", () => {
       fetchNewsService,
       emailNotificationService,
       sendUpdateAccountLink,
+      libretranslateTranslationService,
     );
     await assert.rejects(sendRSSNewsToUser.execute("id"), UserNotFoundError);
   });
@@ -71,6 +73,7 @@ describe("SendRSSNewsToUser use case", () => {
       fetchNewsService,
       emailNotificationService,
       sendUpdateAccountLink,
+      libretranslateTranslationService,
     );
     await assert.doesNotReject(sendRSSNewsToUserEmail.execute("id"));
     assert.deepEqual(sendNewsEmailMock.mock.calls[0].arguments[0]?.recipient, {
@@ -83,6 +86,7 @@ describe("SendRSSNewsToUser use case", () => {
       fetchNewsService,
       telegramNotificationService,
       sendUpdateAccountLink,
+      libretranslateTranslationService,
     );
     await assert.doesNotReject(sendRSSNewsToUserTelegram.execute("id"));
     assert.deepEqual(

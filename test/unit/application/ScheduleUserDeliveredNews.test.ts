@@ -17,6 +17,7 @@ import { systemDateService } from "../../mocked_services/systemDateService.js";
 import { SendUpdateAccountLink } from "../../../src/application/useCases/SendUpdateAccountLink.js";
 import { cryptoService } from "../../mocked_services/cryptoService.js";
 import { tokenRepository } from "../../mocked_repositories/token_repository.js";
+import { libretranslateTranslationService } from "../../mocked_services/libretranslateTranslationService.js";
 describe("ScheduleUserDeliveredNews use case", () => {
   const sendUpdateAccountLink = new SendUpdateAccountLink(
     tokenRepository,
@@ -37,6 +38,7 @@ describe("ScheduleUserDeliveredNews use case", () => {
       fetchNewsService,
       emailNotificationService,
       sendUpdateAccountLink,
+      libretranslateTranslationService,
     );
     const calculateNextDeliveryAt = new CalculateNextDeliveryAt();
     const scheduleUserDeliveredNews = new ScheduleUserDeliveredNews(

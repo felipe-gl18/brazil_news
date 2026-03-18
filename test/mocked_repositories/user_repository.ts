@@ -1,4 +1,4 @@
-import { User } from "../../src/domain/entities/User.js";
+import { Language, User } from "../../src/domain/entities/User.js";
 import { IUserRepository } from "../../src/domain/repositories/IUserRepository.js";
 import { Email } from "../../src/domain/valueObjects/Email.js";
 const user = {
@@ -8,6 +8,7 @@ const user = {
   deliveryTime: new Date(),
   timezone: "south-america",
   nextDeliveryAt: new Date(),
+  language: "pt" as Language,
 };
 const userRepository: IUserRepository = {
   async findUsersToNotify(now) {
