@@ -8,7 +8,7 @@ export interface NotificationNewsDTO {
   title: string;
   link: string;
   content: string;
-  publishedAt: Date;
+  publishedAt: string;
 }
 
 export interface NotificationPayloadDTO {
