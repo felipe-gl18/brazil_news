@@ -31,9 +31,8 @@ export class TelegramNotificationService implements INotificationService {
       news
         .map(
           (item) =>
-            `<b>${item.title}</b>\n` +
-            `<a href="${item.link}">Read more</a>\n` +
-            `<i>${item.publishedAt.toDateString()}</i>\n\n`
+            `<a href="${item.link}">${item.title}</a>\n` +
+            `<i>${item.publishedAt}</i>\n\n`,
         )
         .join("")
     );
