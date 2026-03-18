@@ -2,7 +2,8 @@ import { ITokenRepository } from "../../domain/repositories/ITokenRepository";
 import { IUserRepository } from "../../domain/repositories/IUserRepository";
 import { Email } from "../../domain/valueObjects/Email.js";
 import { IDateService } from "../services/IDateService";
-import { CalculateNextDeliveryAt } from "./CalculateNextDeliveryAt";
+import { CalculateNextDeliveryAt } from "./CalculateNextDeliveryAt.js";
+import { UpdateUserDTO } from "./UpdateUserDTO";
 export class UpdateUser {
   constructor(
     private readonly userRepository: IUserRepository,
