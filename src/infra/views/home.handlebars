@@ -33,6 +33,18 @@
   {{/if}}
   <div class="input-group">
     <input
+      type="telegramChatId"
+      id="telegramChatId"
+      name="telegramChatId"
+      value="{{values.telegramChatId}}"
+    />
+    <label for="telegramChatId">Telegram Chat Id</label>
+  </div>
+  {{#if errors.telegramChatId}}
+    <p class="error">{{errors.telegramChatId}}</p>
+  {{/if}}
+  <div class="input-group">
+    <input
       type="time"
       id="deliveryTime"
       name="deliveryTime"
@@ -57,25 +69,48 @@
   {{#if errors.timezone}}
     <p class="error">{{errors.timezone}}</p>
   {{/if}}
+  <div class="input-group">
+    <select id="language" name="language" required>
+      <option value="pt" {{#if (eq values.language "pt")}}selected{{/if}}>
+        Portuguese
+      </option>
+      <option value="en" {{#if (eq values.language "en")}}selected{{/if}}>
+        English
+      </option>
+      <option value="es" {{#if (eq values.language "es")}}selected{{/if}}>
+        Español
+      </option>
+      <option value="fr" {{#if (eq values.language "fr")}}selected{{/if}}>
+        Français
+      </option>
+      <option value="de" {{#if (eq values.language "de")}}selected{{/if}}>
+        Deutsch
+      </option>
+    </select>
+    <label for="language">Language</label>
+  </div>
+  {{#if errors.language}}
+    <p class="error">{{errors.language}}</p>
+  {{/if}}
   <div class="dropdown">
     <button type="button">Selecionar tópicos
       <i class="fa-solid fa-chevron-down arrow"></i>
     </button>
     <div class="dropdown-content">
       <label>
-        <input type="checkbox" name="topics[]" value="technology" />
+        <input type="checkbox" name="topics[]" value="technology"  {{#if (includes values.topics "technology")}}checked{{/if}} />
         technology
       </label>
       <label>
-        <input type="checkbox" name="topics[]" value="business" />
+        <input type="checkbox" name="topics[]" value="business" {{#if (includes values.topics "business")}}checked{{/if}} />
         business
       </label>
       <label>
-        <input type="checkbox" name="topics[]" value="health" />
+        <input type="checkbox" name="topics[]" value="health" {{#if (includes values.topics "health")}}checked{{/if}} />
         health
       </label>
       <label>
-        <input type="checkbox" name="topics[]" value="world" />
+        <input type="checkbox" name="topics[]" value="world" {{#if (includes values.topics "world")}}checked{{/if}} />
         world
       </label>
     </div>
