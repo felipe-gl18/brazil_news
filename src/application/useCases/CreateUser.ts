@@ -36,6 +36,7 @@ export class CreateUser {
       topics: data.topics,
       deliveryTime,
       timezone: data.timezone,
+      language: data.language,
       nextDeliveryAt: this.calculateNextDeliveryAt.execute(
         this.dateService.now(),
         deliveryTime,
