@@ -20,6 +20,7 @@ import { CalculateNextDeliveryAt } from "./application/useCases/CalculateNextDel
 import { SystemDateService } from "./infra/services/SystemDateService.js";
 import { SendUpdateAccountLink } from "./application/useCases/SendUpdateAccountLink.js";
 import { TokenRepositoryPrisma } from "./infra/prisma/TokenRepositoryPrisma.js";
+import { LibretranslateTranslationService } from "./infra/services/LibretranslateTranslationService.js";
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL!,
 });
@@ -54,12 +55,14 @@ const sendUpdateAccountLink = new SendUpdateAccountLink(
   tokenRepository,
   nodeCryptoService,
 );
+const libretranslateTranslationService = new LibretranslateTranslationService();
 const sendRSSNewsToUser = new SendRSSNewsToUser(
   userRepository,
   deliveredNewsRepository,
   rSSFetchNewsService,
   emailNotificationService,
   sendUpdateAccountLink,
+  libretranslateTranslationService,
 );
 const findUserDeliveredNews = new FindUserDeliveredNews(
   deliveredNewsRepository,
