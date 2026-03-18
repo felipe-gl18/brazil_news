@@ -50,7 +50,7 @@ export class EmailNotificationService implements INotificationService {
                 <strong>${item.title}</strong>
               </a>
               <br />
-              <small>${item.publishedAt.toDateString()}</small>
+              <small>${item.publishedAt}</small>
               <p>${item.content}</p>
             </li>
           `,
