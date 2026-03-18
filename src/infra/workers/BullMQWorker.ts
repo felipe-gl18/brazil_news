@@ -9,6 +9,9 @@ import { PrismaClient } from "../../../generated/prisma/client.js";
 import { NodeCryptoService } from "../services/NodeCryptoService.js";
 import { TokenRepositoryPrisma } from "../prisma/TokenRepositoryPrisma.js";
 import { SendUpdateAccountLink } from "../../application/useCases/SendUpdateAccountLink.js";
+import { TelegramNotificationService } from "../services/TelegramNotificationService.js";
+import { NotiticationDispatcherService } from "../services/NotificationDispatcherService.js";
+import { LibretranslateTranslationService } from "../services/LibretranslateTranslationService.js";
 const connection = { host: "127.0.0.1", port: 6379 };
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL!,
@@ -23,16 +26,23 @@ const deliveredNewsRepository = new DeliveredNewsRepositoryPrisma(prismaClient);
 const tokenRepository = new TokenRepositoryPrisma(prismaClient);
 const rSSFetchNewsService = new RSSFetchNewsService();
 const emailNotificationService = new EmailNotificationService();
+const telegramNotificationService = new TelegramNotificationService();
+const notificationDispatcherService = new NotiticationDispatcherService([
+  emailNotificationService,
+  telegramNotificationService,
+]);
 const sendUpdateAccountLink = new SendUpdateAccountLink(
   tokenRepository,
   nodeCryptoService,
 );
+const libretranslateTranslationService = new LibretranslateTranslationService();
 const sendRSSNewsToUser = new SendRSSNewsToUser(
   userRepository,
   deliveredNewsRepository,
   rSSFetchNewsService,
-  emailNotificationService,
+  notificationDispatcherService,
   sendUpdateAccountLink,
+  libretranslateTranslationService,
 );
 const worker = new Worker(
   "notifications",
