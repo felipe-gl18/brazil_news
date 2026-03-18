@@ -1,10 +1,13 @@
 import { EmptyDeliveryTimeError } from "../erros/EmptyDeliveryTimeError.js";
 import { EmptyEmailError } from "../erros/EmptyEmailError.js";
+import { emptyLanguageError } from "../erros/EmptyLanguageError.js";
 import { EmptyNameError } from "../erros/EmptyNameError.js";
 import { EmptyTimezoneError } from "../erros/EmptyTimezoneError.js";
 import { EmptyTopicsError } from "../erros/EmptyTopicsError.js";
 import { Email } from "../valueObjects/Email.js";
 import { TelegramChatId } from "../valueObjects/TelegramChatId.js";
+
+export type Language = "pt" | "en" | "es" | "fr" | "de";
 
 interface UserProps {
   name: string;
@@ -16,6 +19,7 @@ interface UserProps {
   createdAt?: Date;
   updatedAt?: Date;
   topics: string[];
+  language: Language;
 }
 
 export class User {
@@ -29,6 +33,7 @@ export class User {
     if (!props.timezone?.trim()) throw new EmptyTimezoneError();
     if (!props.topics || props.topics.length === 0)
       throw new EmptyTopicsError();
+    if (!props.language) throw new emptyLanguageError();
 
     this._id = id && id;
     this.props = props;
@@ -68,6 +73,9 @@ export class User {
   get setdAt() {
     return this.props.updatedAt;
   }
+  get language() {
+    return this.props.language;
+  }
   setName(name: string) {
     this.props.name = name;
   }
@@ -85,5 +93,8 @@ export class User {
   }
   setTopics(topics: string[]) {
     this.props.topics = topics;
+  }
+  setLanguage(language: Language) {
+    this.props.language = language;
   }
 }
