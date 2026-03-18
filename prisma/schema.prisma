@@ -13,6 +13,14 @@ datasource db {
   provider = "postgresql"
 }
 
+enum Language {
+  pt
+  en
+  es
+  fr
+  de
+}
+
 model User {
   id                     String          @id @default(uuid())
   name                   String
@@ -28,6 +36,7 @@ model User {
   createdAt              DateTime        @default(now())
   updatedAt              DateTime        @updatedAt
   tokens                 Token[]
+  language               Language
 }
 
 model DeliveredNews {
