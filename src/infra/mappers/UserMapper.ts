@@ -16,8 +16,9 @@ export class UserMapper {
         deliveryTime: raw.deliveryTime,
         nextDeliveryAt: raw.nextDeliveryAt,
         timezone: raw.timezone,
+        language: raw.language,
       },
-      raw.id
+      raw.id,
     );
   }
   static toPersistence(user: User, encrypted?: EncrytedPayload) {
@@ -31,6 +32,7 @@ export class UserMapper {
       deliveryTime: user.deliveryTime,
       timezone: user.timezone,
       nextDeliveryAt: user.nextDeliveryAt,
+      language: user.language,
     };
   }
 }
