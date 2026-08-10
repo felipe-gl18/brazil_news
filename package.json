@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
+    "start:test": "npm run build && node dist/src/tts.js",
     "start:dev": "npm run build && node dist/src/infra/http/server.js",
     "worker": "npm run build && node dist/src/infra/workers/BullMQWorker.js",
     "test": "npm run build && node --test dist/test/**/*.test.js",
@@ -17,7 +18,7 @@
   "description": "",
   "devDependencies": {
     "@types/express": "^5.0.6",
-    "@types/node": "^24.10.1",
+    "@types/node": "^24.13.3",
     "@types/nodemailer": "^7.0.4",
     "@types/pg": "^8.15.6",
     "@types/xml2js": "^0.4.14",
@@ -33,6 +34,7 @@
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "express-handlebars": "^8.0.4",
+    "gtts": "^0.2.1",
     "install": "^0.13.0",
     "ioredis": "^5.8.2",
     "node-cron": "^4.2.1",
