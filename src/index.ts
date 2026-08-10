@@ -21,6 +21,10 @@ import { SystemDateService } from "./infra/services/SystemDateService.js";
 import { SendUpdateAccountLink } from "./application/useCases/SendUpdateAccountLink.js";
 import { TokenRepositoryPrisma } from "./infra/prisma/TokenRepositoryPrisma.js";
 import { LibretranslateTranslationService } from "./infra/services/LibretranslateTranslationService.js";
+import { GTTSService } from "./infra/services/GTTSService.js";
+import { TelegramNotificationService } from "./infra/services/TelegramNotificationService.js";
+import { NotiticationDispatcherService } from "./infra/services/NotificationDispatcherService.js";
+import { AudioNotificationDispatcherService } from "./infra/services/AudioNotificationDispatcherService.js";
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL!,
 });
@@ -55,14 +59,24 @@ const sendUpdateAccountLink = new SendUpdateAccountLink(
   tokenRepository,
   nodeCryptoService,
 );
+const telegramNotificationService = new TelegramNotificationService();
+const notificationDispatcherService = new NotiticationDispatcherService([
+  emailNotificationService,
+  telegramNotificationService,
+]);
+const audioNotificationDispatcherService =
+  new AudioNotificationDispatcherService([telegramNotificationService]);
 const libretranslateTranslationService = new LibretranslateTranslationService();
+const gttsService = new GTTSService();
 const sendRSSNewsToUser = new SendRSSNewsToUser(
   userRepository,
   deliveredNewsRepository,
   rSSFetchNewsService,
-  emailNotificationService,
+  audioNotificationDispatcherService,
+  notificationDispatcherService,
   sendUpdateAccountLink,
   libretranslateTranslationService,
+  gttsService,
 );
 const findUserDeliveredNews = new FindUserDeliveredNews(
   deliveredNewsRepository,
