@@ -4,8 +4,10 @@ import { IUserRepository } from "../../domain/repositories/IUserRepository";
 import { NewsFilterService } from "../../domain/services/NewsFilterService.js";
 import { languages } from "../../utils/languages.js";
 import { RSSNewsMapper } from "../mappers/RSSNewsMapper.js";
+import { IAudioNotificationService } from "../services/IAudioNotificationService.js";
 import { IFetchNewsService } from "../services/IFetchNewsService";
 import { INotificationService } from "../services/INotificationService";
+import { ITextToSpeechService } from "../services/ITextToSpeechService.js";
 import { ITranslationService } from "../services/ITranslationService.js";
 import { SendUpdateAccountLink } from "./SendUpdateAccountLink.js";
 export class SendRSSNewsToUser {
@@ -13,9 +15,11 @@ export class SendRSSNewsToUser {
     private readonly userRepository: IUserRepository,
     private readonly deliveredNewsRepository: IDeliveredNewsRepository,
     private readonly fetchNewsService: IFetchNewsService,
+    private readonly audioNotificationDispatcherService: IAudioNotificationService,
     private readonly notificationDispatcherService: INotificationService,
     private readonly sendUpdateAccountLink: SendUpdateAccountLink,
     private readonly translationService: ITranslationService,
+    private readonly textToSpeechService: ITextToSpeechService,
   ) {}
   async execute(userId: string) {
     const foundUser = await this.userRepository.findById(userId);
@@ -60,6 +64,21 @@ export class SendRSSNewsToUser {
       news: translatedNews,
       recipient,
     });
+
+    if (recipient.telegramChatId) {
+      const newsText = translatedNews
+        .map(
+          (news, index) =>
+            `Notícia ${index + 1}. ${news.title}. ${news.content}`,
+        )
+        .join("\n\n");
+      const audioBuffer = await this.textToSpeechService.textToSpeech(newsText);
+      await this.audioNotificationDispatcherService.sendAudio(
+        recipient.telegramChatId!,
+        audioBuffer,
+        "🎧 Brazil News",
+      );
+    }
     await this.deliveredNewsRepository.saveMany(deliveredNews);
   }
 }
