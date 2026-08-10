@@ -18,6 +18,8 @@ import { SendUpdateAccountLink } from "../../../src/application/useCases/SendUpd
 import { cryptoService } from "../../mocked_services/cryptoService.js";
 import { tokenRepository } from "../../mocked_repositories/token_repository.js";
 import { libretranslateTranslationService } from "../../mocked_services/libretranslateTranslationService.js";
+import { gttsService } from "../../mocked_services/gttsService.js";
+import { telegramNotificationService } from "../../mocked_services/telegramNotificationService.js";
 describe("ScheduleUserDeliveredNews use case", () => {
   const sendUpdateAccountLink = new SendUpdateAccountLink(
     tokenRepository,
@@ -36,9 +38,11 @@ describe("ScheduleUserDeliveredNews use case", () => {
       userRepository,
       deliveredNewsRepository,
       fetchNewsService,
+      telegramNotificationService,
       emailNotificationService,
       sendUpdateAccountLink,
       libretranslateTranslationService,
+      gttsService,
     );
     const calculateNextDeliveryAt = new CalculateNextDeliveryAt();
     const scheduleUserDeliveredNews = new ScheduleUserDeliveredNews(

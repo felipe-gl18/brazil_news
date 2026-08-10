@@ -13,6 +13,7 @@ import { SendUpdateAccountLink } from "../../../src/application/useCases/SendUpd
 import { tokenRepository } from "../../mocked_repositories/token_repository.js";
 import { cryptoService } from "../../mocked_services/cryptoService.js";
 import { libretranslateTranslationService } from "../../mocked_services/libretranslateTranslationService.js";
+import { gttsService } from "../../mocked_services/gttsService.js";
 
 describe("SendRSSNewsToUser use case", () => {
   const sendUpdateAccountLink = new SendUpdateAccountLink(
@@ -27,9 +28,11 @@ describe("SendRSSNewsToUser use case", () => {
       userRepository,
       deliveredNewsRepository,
       fetchNewsService,
+      telegramNotificationService,
       emailNotificationService,
       sendUpdateAccountLink,
       libretranslateTranslationService,
+      gttsService,
     );
     await assert.rejects(sendRSSNewsToUser.execute("id"), UserNotFoundError);
   });
@@ -71,9 +74,11 @@ describe("SendRSSNewsToUser use case", () => {
       userRepository,
       deliveredNewsRepository,
       fetchNewsService,
+      telegramNotificationService,
       emailNotificationService,
       sendUpdateAccountLink,
       libretranslateTranslationService,
+      gttsService,
     );
     await assert.doesNotReject(sendRSSNewsToUserEmail.execute("id"));
     assert.deepEqual(sendNewsEmailMock.mock.calls[0].arguments[0]?.recipient, {
@@ -85,8 +90,10 @@ describe("SendRSSNewsToUser use case", () => {
       deliveredNewsRepository,
       fetchNewsService,
       telegramNotificationService,
+      telegramNotificationService,
       sendUpdateAccountLink,
       libretranslateTranslationService,
+      gttsService,
     );
     await assert.doesNotReject(sendRSSNewsToUserTelegram.execute("id"));
     assert.deepEqual(
