@@ -14,6 +14,7 @@ import { tokenRepository } from "../../mocked_repositories/token_repository.js";
 import { cryptoService } from "../../mocked_services/cryptoService.js";
 import { libretranslateTranslationService } from "../../mocked_services/libretranslateTranslationService.js";
 import { gttsService } from "../../mocked_services/gttsService.js";
+import { notificationServiceRegistry } from "../../mocked_services/NotificationServiceRegistry.js";
 
 describe("SendRSSNewsToUser use case", () => {
   const sendUpdateAccountLink = new SendUpdateAccountLink(
@@ -29,7 +30,7 @@ describe("SendRSSNewsToUser use case", () => {
       deliveredNewsRepository,
       fetchNewsService,
       telegramNotificationService,
-      emailNotificationService,
+      notificationServiceRegistry,
       sendUpdateAccountLink,
       libretranslateTranslationService,
       gttsService,
@@ -75,7 +76,7 @@ describe("SendRSSNewsToUser use case", () => {
       deliveredNewsRepository,
       fetchNewsService,
       telegramNotificationService,
-      emailNotificationService,
+      notificationServiceRegistry,
       sendUpdateAccountLink,
       libretranslateTranslationService,
       gttsService,
@@ -90,7 +91,7 @@ describe("SendRSSNewsToUser use case", () => {
       deliveredNewsRepository,
       fetchNewsService,
       telegramNotificationService,
-      telegramNotificationService,
+      notificationServiceRegistry,
       sendUpdateAccountLink,
       libretranslateTranslationService,
       gttsService,

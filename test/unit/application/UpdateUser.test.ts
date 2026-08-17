@@ -8,6 +8,7 @@ import { userRepository } from "../../mocked_repositories/user_repository.js";
 import { systemDateService } from "../../mocked_services/systemDateService.js";
 import { tokenRepository } from "../../mocked_repositories/token_repository.js";
 import { CalculateNextDeliveryAt } from "../../../src/application/useCases/CalculateNextDeliveryAt.js";
+import { NotificationChannel } from "../../../src/domain/enums/NotificationChannel.js";
 describe("UpdatedUserTopics use case", () => {
   it("should not allow update user if user doesnt exist", async () => {
     mock.method(userRepository, "save", () => {
@@ -41,6 +42,7 @@ describe("UpdatedUserTopics use case", () => {
           topics: ["technology"],
           nextDeliveryAt: new Date(),
           language: "pt" as Language,
+          notificationChannel: "EMAIL" as NotificationChannel,
         }),
       );
     });
@@ -65,7 +67,7 @@ describe("UpdatedUserTopics use case", () => {
     assert.equal(updateMock.mock.calls.length, 1);
     const [result] = updateMock.mock.calls[0].arguments;
     assert.equal(result?.name, "John Doe");
-    assert.equal(result?.email.valueOf, "johndoe@gmail.com");
+    assert.equal(result?.email?.valueOf, "johndoe@gmail.com");
     assert.equal(result?.timezone, "south-africa");
     assert.deepEqual(result?.topics, ["technology", "health"]);
   });

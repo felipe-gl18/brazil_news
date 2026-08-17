@@ -1,4 +1,5 @@
 import { Language, User } from "../../src/domain/entities/User.js";
+import { NotificationChannel } from "../../src/domain/enums/NotificationChannel.js";
 import { IUserRepository } from "../../src/domain/repositories/IUserRepository.js";
 import { Email } from "../../src/domain/valueObjects/Email.js";
 const user = {
@@ -9,6 +10,7 @@ const user = {
   timezone: "south-america",
   nextDeliveryAt: new Date(),
   language: "pt" as Language,
+  notificationChannel: "EMAIL" as NotificationChannel,
 };
 const userRepository: IUserRepository = {
   async findUsersToNotify(now) {

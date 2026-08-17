@@ -3,6 +3,7 @@ import { describe, it } from "node:test";
 import { Language, User } from "../../../src/domain/entities/User.js";
 import { Email } from "../../../src/domain/valueObjects/Email.js";
 import { DomainError } from "../../../src/domain/erros/DomainError.js";
+import { NotificationChannel } from "../../../src/domain/enums/NotificationChannel.js";
 
 describe("User Entity", () => {
   it("should not allow empty name", () => {
@@ -18,6 +19,7 @@ describe("User Entity", () => {
           timezone: "south-america",
           nextDeliveryAt: new Date(),
           language: "pt" as Language,
+          notificationChannel: "EMAIL" as NotificationChannel,
         }),
       { message: "Name cannot be empty" },
     );
@@ -35,6 +37,7 @@ describe("User Entity", () => {
           timezone: "south-america",
           nextDeliveryAt: new Date(),
           language: "pt" as Language,
+          notificationChannel: "EMAIL" as NotificationChannel,
         }),
       {
         message: "Topics cannot be empty",
@@ -54,6 +57,7 @@ describe("User Entity", () => {
           timezone: "south-america",
           nextDeliveryAt: new Date(),
           language: "pt" as Language,
+          notificationChannel: "EMAIL" as NotificationChannel,
         });
         user.setId("123");
         user.setId("456");
@@ -73,6 +77,7 @@ describe("User Entity", () => {
       timezone: "south-america",
       nextDeliveryAt: new Date(),
       language: "pt" as Language,
+      notificationChannel: "EMAIL" as NotificationChannel,
     });
     user.setId("123");
     assert.equal(user.id, "123");
@@ -88,6 +93,7 @@ describe("User Entity", () => {
       timezone: "south-america",
       nextDeliveryAt: new Date(),
       language: "pt" as Language,
+      notificationChannel: "EMAIL" as NotificationChannel,
     });
     user.setTopics(["fitness", "health"]);
   });
@@ -103,9 +109,10 @@ describe("User Entity", () => {
       timezone: "south-america",
       nextDeliveryAt: new Date(),
       language: "pt" as Language,
+      notificationChannel: "EMAIL" as NotificationChannel,
     });
     assert.equal(user.name, "John Doe");
-    assert.equal(user.email.valueOf, "a@b.com");
+    assert.equal(user.email?.valueOf, "a@b.com");
     assert.deepEqual(user.topics, ["fitness"]);
   });
 });

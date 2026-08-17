@@ -4,6 +4,7 @@ import { Email } from "../../../src/domain/valueObjects/Email.js";
 import { Language, User } from "../../../src/domain/entities/User.js";
 import { News } from "../../../src/domain/entities/News.js";
 import { NewsFilterService } from "../../../src/domain/services/NewsFilterService.js";
+import { NotificationChannel } from "../../../src/domain/enums/NotificationChannel.js";
 
 describe("NewsFilterService Domain Tests", () => {
   it("should return true if user interests match news topics", () => {
@@ -25,6 +26,7 @@ describe("NewsFilterService Domain Tests", () => {
         timezone: "south-america",
         nextDeliveryAt: new Date(),
         language: "pt" as Language,
+        notificationChannel: "EMAIL" as NotificationChannel,
       }),
       news,
     );
@@ -50,6 +52,7 @@ describe("NewsFilterService Domain Tests", () => {
         timezone: "south-america",
         nextDeliveryAt: new Date(),
         language: "pt" as Language,
+        notificationChannel: "EMAIL" as NotificationChannel,
       }),
       news,
     );

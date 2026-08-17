@@ -7,6 +7,7 @@ import { userRepository } from "../../mocked_repositories/user_repository.js";
 import { cryptoService } from "../../mocked_services/cryptoService.js";
 import { systemDateService } from "../../mocked_services/systemDateService.js";
 import { Language } from "../../../src/domain/entities/User.js";
+import { NotificationChannel } from "../../../src/domain/enums/NotificationChannel.js";
 describe("CreateUser use case", () => {
   const calculateNextDeliveryAt = new CalculateNextDeliveryAt();
   const user = {
@@ -16,6 +17,7 @@ describe("CreateUser use case", () => {
     deliveryTime: "2025-12-21T18:30:00.000Z",
     timezone: "South/America",
     language: "pt" as Language,
+    notificationChannel: "EMAIL" as NotificationChannel,
   };
   it("should not allow create user if the email is already beign used", async () => {
     mock.method(userRepository, "create", () => {
@@ -46,7 +48,7 @@ describe("CreateUser use case", () => {
     assert.equal(createMock.mock.calls.length, 1);
     const [createdUser] = createMock.mock.calls[0].arguments;
     assert.equal(createdUser?.name, user.name);
-    assert.equal(createdUser?.email.valueOf, user.email);
+    assert.equal(createdUser?.email?.valueOf, user.email);
     assert.equal(createdUser?.timezone, user.timezone);
     assert.equal(createdUser?.deliveryTime, user.deliveryTime);
     assert.deepEqual(createdUser.topics, user.topics);
