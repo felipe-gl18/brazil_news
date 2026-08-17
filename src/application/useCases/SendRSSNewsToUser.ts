@@ -1,4 +1,5 @@
 import { News } from "../../domain/entities/News.js";
+import { NotificationChannel } from "../../domain/enums/NotificationChannel.js";
 import { IDeliveredNewsRepository } from "../../domain/repositories/IDeliveredNewsRepository";
 import { IUserRepository } from "../../domain/repositories/IUserRepository";
 import { NewsFilterService } from "../../domain/services/NewsFilterService.js";
@@ -7,6 +8,7 @@ import { RSSNewsMapper } from "../mappers/RSSNewsMapper.js";
 import { IAudioNotificationService } from "../services/IAudioNotificationService.js";
 import { IFetchNewsService } from "../services/IFetchNewsService";
 import { INotificationService } from "../services/INotificationService";
+import { INotificationServiceRegistry } from "../services/INotificationServiceRegistry.js";
 import { ITextToSpeechService } from "../services/ITextToSpeechService.js";
 import { ITranslationService } from "../services/ITranslationService.js";
 import { SendUpdateAccountLink } from "./SendUpdateAccountLink.js";
@@ -16,7 +18,7 @@ export class SendRSSNewsToUser {
     private readonly deliveredNewsRepository: IDeliveredNewsRepository,
     private readonly fetchNewsService: IFetchNewsService,
     private readonly audioNotificationDispatcherService: IAudioNotificationService,
-    private readonly notificationDispatcherService: INotificationService,
+    private readonly notificationServiceRegistry: INotificationServiceRegistry,
     private readonly sendUpdateAccountLink: SendUpdateAccountLink,
     private readonly translationService: ITranslationService,
     private readonly textToSpeechService: ITextToSpeechService,
@@ -36,19 +38,20 @@ export class SendRSSNewsToUser {
     );
     const updateAccountLink = await this.sendUpdateAccountLink.execute(userId);
     const recipient = {
-      email: foundUser!.email.valueOf,
+      channel: foundUser!.notificationChannel,
+      email: foundUser!.email?.valueOf,
       telegramChatId: foundUser!.telegramChatId?.valueOf,
       updateAccountLink,
     };
 
     const translatedNews = await Promise.all(
-      releventNews.map(async (item) => ({
+      releventNews.map(async (item, index) => ({
         content: await this.translationService.translate(
           item.content,
           foundUser.language,
         ),
         title: await this.translationService.translate(
-          item.title,
+          `News ${index + 1}. ${item.title}`,
           foundUser.language,
         ),
         publishedAt: item.publishedAt.toLocaleDateString(
@@ -60,25 +63,29 @@ export class SendRSSNewsToUser {
       })),
     );
 
-    await this.notificationDispatcherService.notify({
-      news: translatedNews,
-      recipient,
-    });
+    const notificationService = this.notificationServiceRegistry.resolve(
+      recipient.channel,
+    );
+    await notificationService.notify({ news: translatedNews, recipient });
 
-    if (recipient.telegramChatId) {
+    if (
+      recipient.channel === NotificationChannel.TELEGRAM &&
+      recipient.telegramChatId
+    ) {
       const newsText = translatedNews
-        .map(
-          (news, index) =>
-            `Notícia ${index + 1}. ${news.title}. ${news.content}`,
-        )
+        .map((news) => `${news.title}. ${news.content}`)
         .join("\n\n");
-      const audioBuffer = await this.textToSpeechService.textToSpeech(newsText);
+      const audioBuffer = await this.textToSpeechService.textToSpeech(
+        newsText,
+        foundUser.language,
+      );
       await this.audioNotificationDispatcherService.sendAudio(
-        recipient.telegramChatId!,
+        recipient.telegramChatId,
         audioBuffer,
         "🎧 Brazil News",
       );
     }
+
     await this.deliveredNewsRepository.saveMany(deliveredNews);
   }
 }
