@@ -13,6 +13,12 @@ datasource db {
   provider = "postgresql"
 }
 
+enum NotificationChannel {
+  EMAIL
+  TELEGRAM
+  WHATSAPP
+}
+
 enum Language {
   pt
   en
@@ -22,21 +28,22 @@ enum Language {
 }
 
 model User {
-  id                     String          @id @default(uuid())
+  id                     String              @id @default(uuid())
   name                   String
-  email                  String          @unique
+  email                  String?             @unique
   telegramChatCiphertext String?
   telegramChatIv         String?
   telegramChatAuthTag    String?
   topics                 String[]
   deliveredNews          DeliveredNews[]
-  deliveryTime           DateTime        @db.Time()
+  deliveryTime           DateTime            @db.Time()
   timezone               String
   nextDeliveryAt         DateTime
-  createdAt              DateTime        @default(now())
-  updatedAt              DateTime        @updatedAt
+  createdAt              DateTime            @default(now())
+  updatedAt              DateTime            @updatedAt
   tokens                 Token[]
   language               Language
+  notificationChannel    NotificationChannel @default(EMAIL)
 }
 
 model DeliveredNews {
