@@ -14,7 +14,7 @@ export class CreateUser {
     private readonly calculateNextDeliveryAt: CalculateNextDeliveryAt,
   ) {}
   async execute(data: CreateUserDTO) {
-    const email = new Email(data.email);
+    const email = data.email ? new Email(data.email) : undefined;
 
     const telegramChatId = data.telegramChatId
       ? new TelegramChatId(data.telegramChatId)
@@ -29,21 +29,28 @@ export class CreateUser {
       data.timezone,
     );
 
-    const user = new User({
-      name: data.name,
-      email,
-      telegramChatId,
-      topics: data.topics,
-      deliveryTime,
-      timezone: data.timezone,
-      language: data.language,
-      nextDeliveryAt: this.calculateNextDeliveryAt.execute(
-        this.dateService.now(),
+    try {
+      const user = new User({
+        name: data.name,
+        email,
+        telegramChatId,
+        notificationChannel: data.notificationChannel,
+        topics: data.topics,
         deliveryTime,
-        data.timezone,
-      ),
-    });
+        timezone: data.timezone,
+        language: data.language,
+        nextDeliveryAt: this.calculateNextDeliveryAt.execute(
+          this.dateService.now(),
+          deliveryTime,
+          data.timezone,
+        ),
+      });
 
-    await this.userRepository.create(user, encryptedTelegramChatId);
+      await this.userRepository.create(user, encryptedTelegramChatId);
+    } catch (error) {
+      console.error("ERROR CREATING USER:", error);
+      console.error(error instanceof Error ? error.stack : error);
+      throw error;
+    }
   }
 }

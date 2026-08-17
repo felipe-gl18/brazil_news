@@ -4,15 +4,19 @@ import { emptyLanguageError } from "../erros/EmptyLanguageError.js";
 import { EmptyNameError } from "../erros/EmptyNameError.js";
 import { EmptyTimezoneError } from "../erros/EmptyTimezoneError.js";
 import { EmptyTopicsError } from "../erros/EmptyTopicsError.js";
+import { EmptyNotificationChannelError } from "../erros/EmptyNotificationChannelError.js";
+import { InvalidNotificationChannelError } from "../erros/InvalidNotificationChannelError.js";
 import { Email } from "../valueObjects/Email.js";
 import { TelegramChatId } from "../valueObjects/TelegramChatId.js";
+import { NotificationChannel } from "../enums/NotificationChannel.js";
 
 export type Language = "pt" | "en" | "es" | "fr" | "de";
 
 interface UserProps {
   name: string;
-  email: Email;
+  email?: Email;
   telegramChatId?: TelegramChatId;
+  notificationChannel: NotificationChannel;
   deliveryTime: Date;
   timezone: string;
   nextDeliveryAt: Date;
@@ -28,12 +32,19 @@ export class User {
 
   constructor(props: UserProps, id?: string) {
     if (!props.name?.trim()) throw new EmptyNameError();
-    if (!props.email.valueOf.trim()) throw new EmptyEmailError();
     if (!props.deliveryTime) throw new EmptyDeliveryTimeError();
     if (!props.timezone?.trim()) throw new EmptyTimezoneError();
     if (!props.topics || props.topics.length === 0)
       throw new EmptyTopicsError();
     if (!props.language) throw new emptyLanguageError();
+    if (!props.notificationChannel) throw new EmptyNotificationChannelError();
+    if (
+      props.notificationChannel === NotificationChannel.TELEGRAM &&
+      !props.telegramChatId
+    )
+      throw new InvalidNotificationChannelError(
+        "Telegram chat ID is required when notification channel is TELEGRAM",
+      );
 
     this._id = id && id;
     this.props = props;
@@ -51,6 +62,9 @@ export class User {
   }
   get telegramChatId() {
     return this.props.telegramChatId;
+  }
+  get notificationChannel() {
+    return this.props.notificationChannel;
   }
   get name() {
     return this.props.name;
@@ -96,5 +110,19 @@ export class User {
   }
   setLanguage(language: Language) {
     this.props.language = language;
+  }
+  setNotificationChannel(channel: NotificationChannel) {
+    if (
+      channel === NotificationChannel.TELEGRAM &&
+      !this.props.telegramChatId
+    ) {
+      throw new InvalidNotificationChannelError(
+        "Telegram chat ID is required when notification channel is TELEGRAM",
+      );
+    }
+    this.props.notificationChannel = channel;
+  }
+  setTelegramChatId(telegramChatId: TelegramChatId) {
+    this.props.telegramChatId = telegramChatId;
   }
 }
