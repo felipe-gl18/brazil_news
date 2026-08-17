@@ -19,7 +19,7 @@ const nodeCryptoService = new NodeCryptoService();
 
 const userRepositoryPrisma = new UserRepositoryPrisma(
   prismaClient,
-  nodeCryptoService
+  nodeCryptoService,
 );
 const systemDateService = new SystemDateService();
 const calculateNextDeliveryAt = new CalculateNextDeliveryAt();
@@ -28,7 +28,7 @@ const createUser = new CreateUser(
   userRepositoryPrisma,
   nodeCryptoService,
   systemDateService,
-  calculateNextDeliveryAt
+  calculateNextDeliveryAt,
 );
 const registerUser = new RegisterUserController(createUser);
 
