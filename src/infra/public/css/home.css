@@ -188,6 +188,22 @@ form > button:hover {
   margin-bottom: 12px;
 }
 
+.channel-field {
+  display: none;
+}
+.channel-field.active {
+  display: block;
+}
+.channel-option.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.channel-option .badge {
+  font-size: 0.75em;
+  margin-left: 4px;
+  color: #888;
+}
+
 @media screen and (max-width: 420px) {
   form {
     width: 80%;

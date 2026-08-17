@@ -12,7 +12,6 @@ timezones.forEach((timezone) => {
 const dropdown = document.querySelector(".dropdown");
 const content = document.querySelector(".dropdown-content");
 const arrowIcon = document.querySelector(".arrow");
-const removeIcons = document.querySelectorAll(".remove-icon");
 const inputTopics = document.querySelectorAll(
   '.dropdown-content input[type="checkbox"]',
 );
@@ -56,3 +55,37 @@ selectedTopics.addEventListener("click", (e) => {
   if (correspondingInput) correspondingInput.checked = false;
   topicSpan.remove();
 });
+
+// --- Notification channel toggle ---
+const channelRadios = document.querySelectorAll(
+  'input[name="notificationChannel"]',
+);
+const channelFields = document.querySelectorAll(".channel-field");
+
+function updateChannelFields(selectedChannel) {
+  channelFields.forEach((field) => {
+    const fieldChannel = field.dataset.channel;
+    const input = field.querySelector("input");
+    const isActive = fieldChannel === selectedChannel;
+
+    field.classList.toggle("active", isActive);
+    input.disabled = !isActive;
+    input.required = isActive;
+
+    if (!isActive) {
+      // limpa o valor de campos escondidos pra não mandar lixo no submit
+      input.value = "";
+    }
+  });
+}
+
+channelRadios.forEach((radio) => {
+  radio.addEventListener("change", () => {
+    if (radio.checked) updateChannelFields(radio.value);
+  });
+});
+
+const initiallyChecked = document.querySelector(
+  'input[name="notificationChannel"]:checked',
+);
+updateChannelFields(initiallyChecked ? initiallyChecked.value : "EMAIL");

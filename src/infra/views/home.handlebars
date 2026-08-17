@@ -18,22 +18,60 @@
   {{#if errors.name}}
     <p class="error">{{errors.name}}</p>
   {{/if}}
-  <div class="input-group">
+
+  <fieldset class="channel-select">
+    <legend>Notification Channel</legend>
+
+    <label class="channel-option">
+      <input
+        type="radio"
+        name="notificationChannel"
+        value="EMAIL"
+        {{#if (eq values.notificationChannel "EMAIL")}}checked{{/if}}
+        {{#unless values.notificationChannel}}checked{{/unless}}
+      />
+      <i class="fa-solid fa-envelope"></i>
+      Email
+    </label>
+
+    <label class="channel-option">
+      <input
+        type="radio"
+        name="notificationChannel"
+        value="TELEGRAM"
+        {{#if (eq values.notificationChannel "TELEGRAM")}}checked{{/if}}
+      />
+      <i class="fa-brands fa-telegram"></i>
+      Telegram
+    </label>
+
+    <label class="channel-option disabled">
+      <input type="radio" name="notificationChannel" value="WHATSAPP" disabled />
+      <i class="fa-brands fa-whatsapp"></i>
+      WhatsApp
+      <span class="badge">Em breve</span>
+    </label>
+  </fieldset>
+  {{#if errors.notificationChannel}}
+    <p class="error">{{errors.notificationChannel}}</p>
+  {{/if}}
+
+  <div class="input-group channel-field" data-channel="EMAIL">
     <input
       type="email"
       id="email"
       name="email"
       value="{{values.email}}"
-      required
     />
     <label for="email">Email</label>
   </div>
   {{#if errors.email}}
     <p class="error">{{errors.email}}</p>
   {{/if}}
-  <div class="input-group">
+
+  <div class="input-group channel-field" data-channel="TELEGRAM">
     <input
-      type="telegramChatId"
+      type="text"
       id="telegramChatId"
       name="telegramChatId"
       value="{{values.telegramChatId}}"
@@ -43,6 +81,21 @@
   {{#if errors.telegramChatId}}
     <p class="error">{{errors.telegramChatId}}</p>
   {{/if}}
+
+  <div class="input-group channel-field" data-channel="WHATSAPP">
+    <input
+      type="text"
+      id="whatsappNumber"
+      name="whatsappNumber"
+      value="{{values.whatsappNumber}}"
+      disabled
+    />
+    <label for="whatsappNumber">WhatsApp Number</label>
+  </div>
+  {{#if errors.whatsappNumber}}
+    <p class="error">{{errors.whatsappNumber}}</p>
+  {{/if}}
+
   <div class="input-group">
     <input
       type="time"
@@ -57,6 +110,7 @@
   {{#if errors.deliveryTime}}
     <p class="error">{{errors.deliveryTime}}</p>
   {{/if}}
+
   <div class="input-group">
     <select
       id="timezone"
@@ -69,6 +123,7 @@
   {{#if errors.timezone}}
     <p class="error">{{errors.timezone}}</p>
   {{/if}}
+
   <div class="input-group">
     <select id="language" name="language" required>
       <option value="pt" {{#if (eq values.language "pt")}}selected{{/if}}>
@@ -92,13 +147,14 @@
   {{#if errors.language}}
     <p class="error">{{errors.language}}</p>
   {{/if}}
+
   <div class="dropdown">
     <button type="button">Selecionar tópicos
       <i class="fa-solid fa-chevron-down arrow"></i>
     </button>
     <div class="dropdown-content">
       <label>
-        <input type="checkbox" name="topics[]" value="technology"  {{#if (includes values.topics "technology")}}checked{{/if}} />
+        <input type="checkbox" name="topics[]" value="technology" {{#if (includes values.topics "technology")}}checked{{/if}} />
         technology
       </label>
       <label>
