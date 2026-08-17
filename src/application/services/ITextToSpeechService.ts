@@ -1,3 +1,3 @@
 export interface ITextToSpeechService {
-  textToSpeech(text: string): Promise<Buffer>;
+  textToSpeech(text: string, language: string): Promise<Buffer>;
 }
