@@ -17,7 +17,7 @@ export class UpdateAccountViewController {
         token,
         values: {
           name: user?.name,
-          email: user?.email.valueOf,
+          email: user?.email?.valueOf,
           deliveryTime: this.systemDateService.parseDateToString(
             user?.deliveryTime!,
             user?.timezone!,
