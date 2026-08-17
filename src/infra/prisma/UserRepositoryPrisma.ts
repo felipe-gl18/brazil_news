@@ -24,7 +24,7 @@ export class UserRepositoryPrisma implements IUserRepository {
         error instanceof Prisma.PrismaClientKnownRequestError &&
         error.code === "P2002"
       )
-        throw new EmailAlreadyInUseError(user.email.valueOf);
+        throw new EmailAlreadyInUseError(user.email?.valueOf || "");
       if (error instanceof Prisma.PrismaClientInitializationError)
         throw new DatabaseError("Failed to create user", error);
       throw new RepositoryError("Failed to create user", error);
