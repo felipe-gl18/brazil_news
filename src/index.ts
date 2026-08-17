@@ -1,5 +1,8 @@
 import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient } from "../generated/prisma/client.js";
+import {
+  NotificationChannel,
+  PrismaClient,
+} from "../generated/prisma/client.js";
 import { CreateUser } from "./application/useCases/CreateUser.js";
 import { UserRepositoryPrisma } from "./infra/prisma/UserRepositoryPrisma.js";
 import "dotenv/config.js";
@@ -25,6 +28,7 @@ import { GTTSService } from "./infra/services/GTTSService.js";
 import { TelegramNotificationService } from "./infra/services/TelegramNotificationService.js";
 import { NotiticationDispatcherService } from "./infra/services/NotificationDispatcherService.js";
 import { AudioNotificationDispatcherService } from "./infra/services/AudioNotificationDispatcherService.js";
+import { NotificationServiceRegistry } from "./infra/services/NotificationServiceRegistry.js";
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL!,
 });
@@ -48,22 +52,16 @@ const createUser = new CreateUser(
   systemDateService,
   calculateNextDeliveryAt,
 );
-const findUser = new FindUser(userRepository);
-const updateUser = new UpdateUser(
-  userRepository,
-  tokenRepository,
-  calculateNextDeliveryAt,
-  systemDateService,
-);
 const sendUpdateAccountLink = new SendUpdateAccountLink(
   tokenRepository,
   nodeCryptoService,
 );
 const telegramNotificationService = new TelegramNotificationService();
-const notificationDispatcherService = new NotiticationDispatcherService([
-  emailNotificationService,
-  telegramNotificationService,
-]);
+const notificationServiceRegistry = new NotificationServiceRegistry({
+  [NotificationChannel.EMAIL]: emailNotificationService,
+  [NotificationChannel.TELEGRAM]: telegramNotificationService,
+  // [NotificationChannel.WHATSAPP]: whatsappNotificationService, // futuro
+});
 const audioNotificationDispatcherService =
   new AudioNotificationDispatcherService([telegramNotificationService]);
 const libretranslateTranslationService = new LibretranslateTranslationService();
@@ -73,7 +71,7 @@ const sendRSSNewsToUser = new SendRSSNewsToUser(
   deliveredNewsRepository,
   rSSFetchNewsService,
   audioNotificationDispatcherService,
-  notificationDispatcherService,
+  notificationServiceRegistry,
   sendUpdateAccountLink,
   libretranslateTranslationService,
   gttsService,

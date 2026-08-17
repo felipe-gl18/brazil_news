@@ -14,6 +14,8 @@ import { NotiticationDispatcherService } from "../services/NotificationDispatche
 import { LibretranslateTranslationService } from "../services/LibretranslateTranslationService.js";
 import { AudioNotificationDispatcherService } from "../services/AudioNotificationDispatcherService.js";
 import { GTTSService } from "../services/GTTSService.js";
+import { NotificationChannel } from "../../domain/enums/NotificationChannel.js";
+import { NotificationServiceRegistry } from "../services/NotificationServiceRegistry.js";
 const connection = { host: "127.0.0.1", port: 6379 };
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL!,
@@ -29,10 +31,11 @@ const tokenRepository = new TokenRepositoryPrisma(prismaClient);
 const rSSFetchNewsService = new RSSFetchNewsService();
 const emailNotificationService = new EmailNotificationService();
 const telegramNotificationService = new TelegramNotificationService();
-const notificationDispatcherService = new NotiticationDispatcherService([
-  emailNotificationService,
-  telegramNotificationService,
-]);
+const notificationServiceRegistry = new NotificationServiceRegistry({
+  [NotificationChannel.EMAIL]: emailNotificationService,
+  [NotificationChannel.TELEGRAM]: telegramNotificationService,
+  // [NotificationChannel.WHATSAPP]: whatsappNotificationService, // futuro
+});
 const audioNotificationDispatcherService =
   new AudioNotificationDispatcherService([telegramNotificationService]);
 const sendUpdateAccountLink = new SendUpdateAccountLink(
@@ -46,7 +49,7 @@ const sendRSSNewsToUser = new SendRSSNewsToUser(
   deliveredNewsRepository,
   rSSFetchNewsService,
   audioNotificationDispatcherService,
-  notificationDispatcherService,
+  notificationServiceRegistry,
   sendUpdateAccountLink,
   libretranslateTranslationService,
   gttsService,
