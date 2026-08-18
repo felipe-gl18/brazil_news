@@ -5,12 +5,11 @@ import { IUserRepository } from "../../domain/repositories/IUserRepository";
 import { NewsFilterService } from "../../domain/services/NewsFilterService.js";
 import { languages } from "../../utils/languages.js";
 import { RSSNewsMapper } from "../mappers/RSSNewsMapper.js";
-import { IAudioNotificationService } from "../services/IAudioNotificationService.js";
-import { IFetchNewsService } from "../services/IFetchNewsService";
-import { INotificationService } from "../services/INotificationService";
-import { INotificationServiceRegistry } from "../services/INotificationServiceRegistry.js";
-import { ITextToSpeechService } from "../services/ITextToSpeechService.js";
-import { ITranslationService } from "../services/ITranslationService.js";
+import { IAudioNotificationService } from "../interfaces/IAudioNotificationService.js";
+import { IFetchNewsService } from "../interfaces/IFetchNewsService.js";
+import { INotificationServiceRegistry } from "../interfaces/INotificationServiceRegistry.js";
+import { ITextToSpeechService } from "../interfaces/ITextToSpeechService.js";
+import { ITranslationService } from "../interfaces/ITranslationService.js";
 import { SendUpdateAccountLink } from "./SendUpdateAccountLink.js";
 export class SendRSSNewsToUser {
   constructor(
@@ -40,7 +39,7 @@ export class SendRSSNewsToUser {
     const recipient = {
       channel: foundUser!.notificationChannel,
       email: foundUser!.email?.valueOf,
-      telegramChatId: foundUser!.telegramChatId?.valueOf,
+      telegramChatId: foundUser!.telegramChatId?.value,
       updateAccountLink,
     };
 

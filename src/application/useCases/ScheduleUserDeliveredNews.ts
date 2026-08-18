@@ -1,7 +1,7 @@
 import { IUserRepository } from "../../domain/repositories/IUserRepository";
-import { IDateService } from "../services/IDateService";
-import { IQueueService } from "../services/IQueueService";
-import { IScheduler } from "../services/IScheduler";
+import { IDateService } from "../interfaces/IDateService";
+import { IQueueService } from "../interfaces/IQueueService";
+import { IScheduler } from "../interfaces/IScheduler";
 import { CalculateNextDeliveryAt } from "./CalculateNextDeliveryAt";
 
 export class ScheduleUserDeliveredNews {

@@ -1,5 +1,5 @@
 import { ITokenRepository } from "../../domain/repositories/ITokenRepository";
-import { ICryptoService } from "../services/ICryptoService";
+import { ICryptoService } from "../interfaces/ICryptoService";
 
 export class SendUpdateAccountLink {
   constructor(
