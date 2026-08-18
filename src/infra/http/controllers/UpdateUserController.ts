@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from "express";
-import { UpdateUser } from "../../../application/useCases/UpdateUser.js";
 import { DomainError } from "../../../domain/erros/DomainError.js";
 import { ApplicationError } from "../../../application/erros/ApplicationError.js";
+import { UserService } from "../../../application/services/UserService.js";
 export class UpdateUserController {
-  constructor(private readonly updateUser: UpdateUser) {}
+  constructor(private readonly userService: UserService) {}
   async handle(req: Request, res: Response, next: NextFunction) {
     try {
-      await this.updateUser.execute(req.params.token, req.body);
+      await this.userService.update(req.params.token, req.body);
       return res
         .status(201)
         .render("updated-successfully", { values: req.body });

@@ -1,12 +1,14 @@
 import { Router } from "express";
 import { RegisterUserController } from "../controllers/RegisterUserController.js";
-import { CreateUser } from "../../../application/useCases/CreateUser.js";
 import { UserRepositoryPrisma } from "../../prisma/UserRepositoryPrisma.js";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../../../../generated/prisma/client.js";
 import { NodeCryptoService } from "../../services/NodeCryptoService.js";
 import { SystemDateService } from "../../services/SystemDateService.js";
 import { CalculateNextDeliveryAt } from "../../../application/useCases/CalculateNextDeliveryAt.js";
+import { UserService } from "../../../application/services/UserService.js";
+import { TokenRepositoryPrisma } from "../../prisma/TokenRepositoryPrisma.js";
+import { DeliveredNewsRepositoryPrisma } from "../../prisma/DeliveredNewsRepositoryPrisma.js";
 
 const route = Router();
 
@@ -23,14 +25,19 @@ const userRepositoryPrisma = new UserRepositoryPrisma(
 );
 const systemDateService = new SystemDateService();
 const calculateNextDeliveryAt = new CalculateNextDeliveryAt();
+const tokenRepository = new TokenRepositoryPrisma(prismaClient);
+const deliveredNewsRepository = new DeliveredNewsRepositoryPrisma(prismaClient);
 
-const createUser = new CreateUser(
+const userService = new UserService(
   userRepositoryPrisma,
   nodeCryptoService,
+  tokenRepository,
+  deliveredNewsRepository,
   systemDateService,
   calculateNextDeliveryAt,
 );
-const registerUser = new RegisterUserController(createUser);
+
+const registerUser = new RegisterUserController(userService);
 
 route.post("", async (req, res, next) => registerUser.handle(req, res, next));
 

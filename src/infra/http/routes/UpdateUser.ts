@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { UpdateUserController } from "../controllers/UpdateUserController.js";
-import { UpdateUser } from "../../../application/useCases/UpdateUser.js";
 import { UserRepositoryPrisma } from "../../prisma/UserRepositoryPrisma.js";
 import { PrismaClient } from "../../../../generated/prisma/client.js";
 import { PrismaPg } from "@prisma/adapter-pg";
@@ -8,6 +7,8 @@ import { NodeCryptoService } from "../../services/NodeCryptoService.js";
 import { SystemDateService } from "../../services/SystemDateService.js";
 import { TokenRepositoryPrisma } from "../../prisma/TokenRepositoryPrisma.js";
 import { CalculateNextDeliveryAt } from "../../../application/useCases/CalculateNextDeliveryAt.js";
+import { UserService } from "../../../application/services/UserService.js";
+import { DeliveredNewsRepositoryPrisma } from "../../prisma/DeliveredNewsRepositoryPrisma.js";
 
 const route = Router();
 const adapter = new PrismaPg({
@@ -15,20 +16,24 @@ const adapter = new PrismaPg({
 });
 const prismaClient = new PrismaClient({ adapter });
 const nodeCryptoService = new NodeCryptoService();
+
 const userRepositoryPrisma = new UserRepositoryPrisma(
   prismaClient,
   nodeCryptoService,
 );
-const tokenRepository = new TokenRepositoryPrisma(prismaClient);
 const systemDateService = new SystemDateService();
 const calculateNextDeliveryAt = new CalculateNextDeliveryAt();
-const updateUser = new UpdateUser(
+const tokenRepository = new TokenRepositoryPrisma(prismaClient);
+const deliveredNewsRepository = new DeliveredNewsRepositoryPrisma(prismaClient);
+const userService = new UserService(
   userRepositoryPrisma,
+  nodeCryptoService,
   tokenRepository,
-  calculateNextDeliveryAt,
+  deliveredNewsRepository,
   systemDateService,
+  calculateNextDeliveryAt,
 );
-const updateUserController = new UpdateUserController(updateUser);
+const updateUserController = new UpdateUserController(userService);
 
 route.post("/:token", async (req, res, next) =>
   updateUserController.handle(req, res, next),

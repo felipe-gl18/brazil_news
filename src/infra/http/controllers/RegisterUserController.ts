@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import { CreateUser } from "../../../application/useCases/CreateUser.js";
 import { DomainError } from "../../../domain/erros/DomainError.js";
 import { ApplicationError } from "../../../application/erros/ApplicationError.js";
-import { CreateUserDTO } from "../../../application/useCases/CreateUserDTO.js";
+import { CreateUserDTO } from "../../../application/dtos/CreateUserDTO.js";
+import { UserService } from "../../../application/services/UserService.js";
 
 export class RegisterUserController {
-  constructor(private readonly createUser: CreateUser) {}
+  constructor(private readonly userService: UserService) {}
 
   async handle(req: Request, res: Response, next: NextFunction) {
     try {
@@ -26,7 +26,7 @@ export class RegisterUserController {
         language: req.body.language,
       };
 
-      await this.createUser.execute(dto);
+      await this.userService.create(dto);
       return res.status(201).render("registered", { values: req.body });
     } catch (error) {
       if (error instanceof DomainError || error instanceof ApplicationError)

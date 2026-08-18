@@ -1,6 +1,6 @@
 import { PrismaClient, Prisma } from "../../../generated/prisma/client.js";
 import { EncrytedPayload } from "../../application/dtos/CryptoServiceDTO.js";
-import { ICryptoService } from "../../application/services/ICryptoService.js";
+import { ICryptoService } from "../../application/interfaces/ICryptoService.js";
 import { User } from "../../domain/entities/User.js";
 import { EmailAlreadyInUseError } from "../../application/erros/EmailAlreadyInUseError.js";
 import { UserNotFoundError } from "../../application/erros/UserNotFoundError.js";
