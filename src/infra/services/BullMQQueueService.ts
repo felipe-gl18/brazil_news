@@ -1,5 +1,5 @@
 import { Queue } from "bullmq";
-import { IQueueService } from "../../application/services/IQueueService";
+import { IQueueService } from "../../application/interfaces/IQueueService";
 
 export class BullMQQueueService implements IQueueService {
   private readonly connection: { host: string; port: number };

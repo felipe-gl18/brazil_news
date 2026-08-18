@@ -1,4 +1,4 @@
-import { IAudioNotificationService } from "../../application/services/IAudioNotificationService";
+import { IAudioNotificationService } from "../../application/interfaces/IAudioNotificationService";
 
 export class AudioNotificationDispatcherService implements IAudioNotificationService {
   constructor(private readonly services: IAudioNotificationService[]) {}

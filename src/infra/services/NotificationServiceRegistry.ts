@@ -1,6 +1,6 @@
 import { NotificationChannel } from "../../domain/enums/NotificationChannel";
-import { INotificationService } from "../../application/services/INotificationService";
-import { INotificationServiceRegistry } from "../../application/services/INotificationServiceRegistry";
+import { INotificationService } from "../../application/interfaces/INotificationService";
+import { INotificationServiceRegistry } from "../../application/interfaces/INotificationServiceRegistry";
 
 export class NotificationServiceRegistry implements INotificationServiceRegistry {
   private readonly services: Map<NotificationChannel, INotificationService>;

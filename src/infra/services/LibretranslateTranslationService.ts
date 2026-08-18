@@ -1,4 +1,4 @@
-import { ITranslationService } from "../../application/services/ITranslationService";
+import { ITranslationService } from "../../application/interfaces/ITranslationService";
 
 export class LibretranslateTranslationService implements ITranslationService {
   async translate(

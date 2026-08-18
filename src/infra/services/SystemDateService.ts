@@ -1,5 +1,5 @@
 import { TZDate } from "@date-fns/tz";
-import { IDateService } from "../../application/services/IDateService";
+import { IDateService } from "../../application/interfaces/IDateService";
 
 export class SystemDateService implements IDateService {
   now() {

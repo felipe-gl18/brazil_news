@@ -1,5 +1,5 @@
 import { EncrytedPayload } from "../../application/dtos/CryptoServiceDTO";
-import { ICryptoService } from "../../application/services/ICryptoService";
+import { ICryptoService } from "../../application/interfaces/ICryptoService";
 import crypto from "node:crypto";
 
 export class NodeCryptoService implements ICryptoService {

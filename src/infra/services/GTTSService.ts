@@ -1,5 +1,5 @@
 import GTTS from "gtts";
-import { ITextToSpeechService } from "../../application/services/ITextToSpeechService";
+import { ITextToSpeechService } from "../../application/interfaces/ITextToSpeechService";
 
 export class GTTSService implements ITextToSpeechService {
   async textToSpeech(

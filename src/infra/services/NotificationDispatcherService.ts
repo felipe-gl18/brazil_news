@@ -1,5 +1,5 @@
 import { NotificationPayloadDTO } from "../../application/dtos/NotificationDTO";
-import { INotificationService } from "../../application/services/INotificationService";
+import { INotificationService } from "../../application/interfaces/INotificationService";
 
 export class NotiticationDispatcherService implements INotificationService {
   constructor(private readonly services: INotificationService[]) {}

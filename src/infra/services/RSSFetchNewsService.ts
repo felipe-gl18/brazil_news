@@ -1,5 +1,5 @@
 import { FetchNewsDTO } from "../../application/dtos/FetchNewsDTO";
-import { IFetchNewsService } from "../../application/services/IFetchNewsService";
+import { IFetchNewsService } from "../../application/interfaces/IFetchNewsService";
 import { News } from "../../domain/entities/News.js";
 import Parser from "rss-parser";
 const BBC_FEEDS: Record<string, string> = {

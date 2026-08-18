@@ -1,4 +1,4 @@
-import { INotificationService } from "../../application/services/INotificationService";
+import { INotificationService } from "../../application/interfaces/INotificationService";
 import nodemailer, { Transporter } from "nodemailer";
 import "dotenv/config";
 import {

@@ -2,8 +2,8 @@ import {
   NotificationNewsDTO,
   NotificationPayloadDTO,
 } from "../../application/dtos/NotificationDTO";
-import { IAudioNotificationService } from "../../application/services/IAudioNotificationService";
-import { INotificationService } from "../../application/services/INotificationService";
+import { IAudioNotificationService } from "../../application/interfaces/IAudioNotificationService";
+import { INotificationService } from "../../application/interfaces/INotificationService";
 
 export class TelegramNotificationService
   implements INotificationService, IAudioNotificationService

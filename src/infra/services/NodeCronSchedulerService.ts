@@ -1,4 +1,4 @@
-import { IScheduler } from "../../application/services/IScheduler";
+import { IScheduler } from "../../application/interfaces/IScheduler";
 import cron from "node-cron";
 
 export class NodeCronSchedulerService implements IScheduler {
