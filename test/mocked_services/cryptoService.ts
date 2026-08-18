@@ -1,4 +1,4 @@
-import { ICryptoService } from "../../src/application/services/ICryptoService";
+import { ICryptoService } from "../../src/application/interfaces/ICryptoService";
 
 const cryptoService: ICryptoService = {
   encrypt() {

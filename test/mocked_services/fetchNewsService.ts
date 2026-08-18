@@ -1,4 +1,4 @@
-import { IFetchNewsService } from "../../src/application/services/IFetchNewsService";
+import { IFetchNewsService } from "../../src/application/interfaces/IFetchNewsService";
 
 const fetchNewsService: IFetchNewsService = {
   async fetchLatestNews(topics) {

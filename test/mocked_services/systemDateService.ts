@@ -1,4 +1,4 @@
-import { IDateService } from "../../src/application/services/IDateService";
+import { IDateService } from "../../src/application/interfaces/IDateService";
 
 const systemDateService: IDateService = {
   now() {

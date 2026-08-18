@@ -1,4 +1,4 @@
-import { ITextToSpeechService } from "../../src/application/services/ITextToSpeechService";
+import { ITextToSpeechService } from "../../src/application/interfaces/ITextToSpeechService";
 
 const gttsService: ITextToSpeechService = {
   async textToSpeech(text) {

@@ -1,4 +1,4 @@
-import { IQueueService } from "../../src/application/services/IQueueService";
+import { IQueueService } from "../../src/application/interfaces/IQueueService";
 const bullmqQueueService: IQueueService = {
   async addJob(userId) {},
 };

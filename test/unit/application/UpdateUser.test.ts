@@ -1,6 +1,5 @@
 import { describe, it, mock } from "node:test";
 import assert from "node:assert/strict";
-import { UpdateUser } from "../../../src/application/useCases/UpdateUser.js";
 import { UserNotFoundError } from "../../../src/application/erros/UserNotFoundError.js";
 import { Email } from "../../../src/domain/valueObjects/Email.js";
 import { Language, User } from "../../../src/domain/entities/User.js";
@@ -9,19 +8,14 @@ import { systemDateService } from "../../mocked_services/systemDateService.js";
 import { tokenRepository } from "../../mocked_repositories/token_repository.js";
 import { CalculateNextDeliveryAt } from "../../../src/application/useCases/CalculateNextDeliveryAt.js";
 import { NotificationChannel } from "../../../src/domain/enums/NotificationChannel.js";
+import { userService } from "../../mocked_services/userService.js";
 describe("UpdatedUserTopics use case", () => {
   it("should not allow update user if user doesnt exist", async () => {
     mock.method(userRepository, "save", () => {
       throw new UserNotFoundError();
     });
-    const updateUserTopics = new UpdateUser(
-      userRepository,
-      tokenRepository,
-      new CalculateNextDeliveryAt(),
-      systemDateService,
-    );
     await assert.rejects(
-      updateUserTopics.execute("id", {
+      userService.update("id", {
         name: "John Doe",
         email: "johndoe@gmail.com",
         deliveryTime: new Date().toISOString(),
@@ -49,14 +43,8 @@ describe("UpdatedUserTopics use case", () => {
     const updateMock = mock.method(userRepository, "save", () => {
       return Promise.resolve();
     });
-    const updateUser = new UpdateUser(
-      userRepository,
-      tokenRepository,
-      new CalculateNextDeliveryAt(),
-      systemDateService,
-    );
     await assert.doesNotReject(
-      updateUser.execute("id", {
+      userService.update("id", {
         name: "John Doe",
         email: "johndoe@gmail.com",
         deliveryTime: new Date().toISOString(),

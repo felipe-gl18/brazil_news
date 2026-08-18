@@ -1,6 +1,5 @@
 import { describe, it, mock } from "node:test";
 import assert from "node:assert/strict";
-import { CreateUser } from "../../../src/application/useCases/CreateUser.js";
 import { EmailAlreadyInUseError } from "../../../src/application/erros/EmailAlreadyInUseError.js";
 import { CalculateNextDeliveryAt } from "../../../src/application/useCases/CalculateNextDeliveryAt.js";
 import { userRepository } from "../../mocked_repositories/user_repository.js";
@@ -8,6 +7,7 @@ import { cryptoService } from "../../mocked_services/cryptoService.js";
 import { systemDateService } from "../../mocked_services/systemDateService.js";
 import { Language } from "../../../src/domain/entities/User.js";
 import { NotificationChannel } from "../../../src/domain/enums/NotificationChannel.js";
+import { userService } from "../../mocked_services/userService.js";
 describe("CreateUser use case", () => {
   const calculateNextDeliveryAt = new CalculateNextDeliveryAt();
   const user = {
@@ -23,13 +23,7 @@ describe("CreateUser use case", () => {
     mock.method(userRepository, "create", () => {
       throw new EmailAlreadyInUseError("johndoe@gmail.com");
     });
-    const createUser = new CreateUser(
-      userRepository,
-      cryptoService,
-      systemDateService,
-      calculateNextDeliveryAt,
-    );
-    await assert.rejects(createUser.execute(user), EmailAlreadyInUseError);
+    await assert.rejects(userService.create(user), EmailAlreadyInUseError);
   });
   it("should allow create user", async () => {
     mock.method(userRepository, "findByEmail", () => {
@@ -38,13 +32,7 @@ describe("CreateUser use case", () => {
     const createMock = mock.method(userRepository, "create", () => {
       return Promise.resolve();
     });
-    const createUser = new CreateUser(
-      userRepository,
-      cryptoService,
-      systemDateService,
-      calculateNextDeliveryAt,
-    );
-    await assert.doesNotReject(createUser.execute(user));
+    await assert.doesNotReject(userService.create(user));
     assert.equal(createMock.mock.calls.length, 1);
     const [createdUser] = createMock.mock.calls[0].arguments;
     assert.equal(createdUser?.name, user.name);

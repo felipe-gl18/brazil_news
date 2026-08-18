@@ -1,4 +1,4 @@
-import { INotificationService } from "../../src/application/services/INotificationService";
+import { INotificationService } from "../../src/application/interfaces/INotificationService";
 
 const emailNotificationService: INotificationService = {
   async notify() {},
