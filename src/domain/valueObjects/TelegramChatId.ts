@@ -5,7 +5,7 @@ export class TelegramChatId {
     }
   }
 
-  get valueOf() {
+  get value(): string {
     return this.chatId;
   }
 }
